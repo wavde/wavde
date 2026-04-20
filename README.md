@@ -22,6 +22,12 @@ FAANG-style SQL interview problems and short references for pattern recognition 
 
 ---
 
+## ✍️ Writing
+
+- [Finding (and fixing) a 17% Type-I error bug in my own mSPRT implementation](writing/finding-and-fixing-msprt-bug.md) — a case for property-based tests in statistical code
+
+---
+
 ## 🛠️ Stack
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
