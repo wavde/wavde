@@ -34,16 +34,6 @@ FAANG-style SQL problems, quick EDAs, and notes from papers & books (e.g., *Trus
 
 ---
 
-## 🌌 Just For Fun
-
-Side projects collected in one repo — curiosity over polish:
-
-- 🔭 [**fun-projects/astro-tools**](https://github.com/wavde/fun-projects/tree/main/astro-tools) — NASA APOD fetcher + live ISS tracker CLI
-
-See the full collection at [**fun-projects**](https://github.com/wavde/fun-projects).
-
----
-
 ## 📫 Contact
 
 - GitHub: [@wavde](https://github.com/wavde)
