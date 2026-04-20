@@ -36,10 +36,11 @@ FAANG-style SQL problems, quick EDAs, and notes from papers & books (e.g., *Trus
 
 ## 🌌 Just For Fun
 
-Side projects that have nothing to do with data science — just curiosity:
+Side projects collected in one repo — curiosity over polish:
 
-- 🔭 Space / astronomy tooling
-- ✨ Astrology chart utilities
+- 🔭 [**fun-projects/astro-tools**](https://github.com/wavde/fun-projects/tree/main/astro-tools) — NASA APOD fetcher + live ISS tracker CLI
+
+See the full collection at [**fun-projects**](https://github.com/wavde/fun-projects).
 
 ---
 
