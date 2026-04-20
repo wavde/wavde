@@ -2,13 +2,11 @@
 
 **Senior Data Scientist — Analytics · Experimentation · Causal Inference**
 
-I work at the intersection of product analytics and causal inference, helping teams make trustworthy decisions from messy real-world data. Currently building a portfolio focused on the kind of problems senior analytics ICs tackle at scale — experimentation design, metric strategy, and decision science.
+I work on experimentation, causal inference, and decision-grade product analytics — the problems senior analytics ICs own at FAANG-scale: experiment design, metric strategy, and turning messy data into decisions.
 
 ---
 
 ## 🔭 Featured Projects
-
-> *Building in public — these repos are actively evolving.*
 
 ### 🧪 [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook)
 A hands-on tour of experimentation and causal methods: A/B testing with CUPED, synthetic control, difference-in-differences, propensity score matching, and sequential testing — each with a memo-style writeup.
@@ -20,7 +18,7 @@ End-to-end product analytics on a public dataset: funnels, retention cohorts, en
 A small Python package for experimentation: sample size / MDE, CUPED, sequential tests (mSPRT), and ratio-metric variance via the delta method. Tested, typed, and `pip install`-able.
 
 ### 🗒️ [analytics-sandbox](https://github.com/wavde/analytics-sandbox)
-FAANG-style SQL problems, quick EDAs, and notes from papers & books (e.g., *Trustworthy Online Controlled Experiments*).
+FAANG-style SQL interview problems and short references for pattern recognition across window functions, funnels, cohorts, and retention math.
 
 ---
 
