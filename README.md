@@ -25,6 +25,8 @@ FAANG-style SQL interview problems and short references for pattern recognition 
 ## ✍️ Writing
 
 - [Finding (and fixing) a 17% Type-I error bug in my own mSPRT implementation](writing/finding-and-fixing-msprt-bug.md) — a case for property-based tests in statistical code
+- [What LaLonde taught me about propensity score matching](writing/what-lalonde-taught-me.md) — AIPW vs PSM on a replication benchmark
+- [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md) — a framework for metric selection under Goodhart's law
 
 ---
 
