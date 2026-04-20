@@ -45,4 +45,5 @@ FAANG-style SQL interview problems and short references for pattern recognition 
 
 ## 📫 Contact
 
+- Website: [wavde.github.io](https://wavde.github.io)
 - GitHub: [@wavde](https://github.com/wavde)
