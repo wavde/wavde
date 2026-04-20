@@ -24,6 +24,9 @@ FAANG-style SQL interview problems and short references for pattern recognition 
 
 ## ✍️ Writing
 
+- [When TWFE lies: staggered rollouts and what Callaway-Sant'Anna buys you](writing/twfe-lies-on-staggered-rollouts.md) — why the default DiD regression is biased under staggered adoption
+- [E-values: the one-number sensitivity check every observational memo should have](writing/e-values-for-observational-memos.md) — quantifying robustness to unmeasured confounding
+- [CUPED inside sequential testing: two variance reductions that compound](writing/cuped-inside-sequential-testing.md) — when and how to combine them cleanly
 - [Finding (and fixing) a 17% Type-I error bug in my own mSPRT implementation](writing/finding-and-fixing-msprt-bug.md) — a case for property-based tests in statistical code
 - [What LaLonde taught me about propensity score matching](writing/what-lalonde-taught-me.md) — AIPW vs PSM on a replication benchmark
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md) — a framework for metric selection under Goodhart's law
