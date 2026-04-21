@@ -1,25 +1,16 @@
-# Finding (and fixing) a 17% Type-I error bug in my own mSPRT implementation
+# Finding (and fixing) a 17% Type-I error bug in an mSPRT implementation
 
 _Drafted April 2026. Part of [experiment-toolkit](https://github.com/wavde/experiment-toolkit)._
 
 ## TL;DR
 
-I shipped a first cut of an mSPRT (mixture Sequential Probability Ratio Test)
-always-valid p-value. It looked correct — passed smoke tests, matched the
-formula in my notes. Under the null, **it flagged false positives ~17% of the
-time at a nominal α = 5%.** The bug was a factor-of-2 in the prior-scaling
-term. This post walks through how I caught it and what I changed to keep it
-from happening again.
+A first cut of an mSPRT (mixture Sequential Probability Ratio Test) always-valid p-value shipped in the package. It looked correct. Smoke tests passed. The formula matched my notes. Under the null, it still rejected at roughly **17% when the nominal alpha was 5%**. The bug was a factor-of-two in the prior-scaling term. This post walks through how the bug was caught and what changed to keep that class of error from shipping again.
 
 ## Why mSPRT
 
-Classical A/B analysis assumes you look once at the end. Product
-stakeholders peek at dashboards. Every peek is a multiple-testing opportunity
-that inflates Type-I error. mSPRT (Robbins 1970, Johari-Pekelis-Walsh 2017)
-gives you a p-value that is valid **at any stopping time**, so peeking is
-safe.
+Classical A/B analysis assumes a single look at the end of the experiment. In practice, stakeholders peek at dashboards. Every unscheduled look is a multiple-testing opportunity that inflates Type-I error. mSPRT (Robbins, 1970; Johari, Pekelis, Walsh, 2017) provides a p-value that is valid at any stopping time, so peeking is safe.
 
-The core formula is:
+The formula:
 
 ```
 V = 2σ² / n
@@ -28,28 +19,21 @@ log Λ = 0.5 · log(V / (V + τ²)) + (δ̂² / 2V) · shrinkage
 p = min(1, 1/Λ)
 ```
 
-where δ̂ is the observed effect, σ is the per-observation SD, n is per-arm
-sample size, and τ is the prior SD on the true effect.
+where `δ̂` is the observed effect, `σ` is the per-observation SD, `n` is per-arm sample size, and `τ` is the prior SD on the true effect.
 
 ## The bug
 
-An earlier draft of mine had the prior-scaling term written as `τ²/2` instead
-of `τ²` inside the `V + τ²/2` denominator. It's a small algebra slip — the
-kind of thing unit tests on three hand-picked cases won't catch, because the
-output is still a valid-looking p-value in [0, 1].
+An earlier draft had the prior-scaling term as `τ²/2` instead of `τ²` in the `V + τ²` denominator. A small algebra slip. Three hand-picked unit tests did not catch it because the output was still a number in `[0, 1]` that moved in the expected direction as `n` grew.
 
-## How I caught it
+## How it was caught
 
-I wrote a **Type-I error simulation** and made it a unit test. The test is:
+The test that caught it is a **Type-I error simulation** and now lives in CI:
 
-1. Simulate many experiments under H0 (zero true effect).
+1. Simulate many experiments under H0 (no true effect).
 2. At each sample size along the trajectory, compute the mSPRT p-value.
-3. For an always-valid test, the fraction of trajectories that **ever** fall
-   below α should be ≤ α.
+3. For an always-valid test, the fraction of trajectories that *ever* dip below alpha should be at most alpha.
 
-Against the buggy implementation, this fraction came out near **17% for
-α = 0.05**. The correct implementation hovers at 3–4% — comfortably below α
-(always-valid tests are conservative, and that's the point).
+Against the buggy implementation, that fraction came out near **17% at alpha = 0.05**. The corrected implementation hovers at 3 to 4%, comfortably below alpha. Always-valid tests are conservative by construction; that gap is expected.
 
 ```python
 # tests/test_toolkit.py
@@ -72,36 +56,25 @@ def test_msprt_always_valid_type1_error():
     assert rejections / n_trials <= alpha + 0.015  # small Monte Carlo slack
 ```
 
-This is the test that caught the bug. It now ships in the package and runs
-on every CI push.
+It now runs on every push.
 
 ## Lessons
 
-1. **Known-answer tests are table stakes; property tests are what actually
-   catch subtle bugs.** A "does the number look sensible?" test would have
-   passed a 17%-false-positive implementation. A Type-I error simulation
-   doesn't.
-2. **For statistical code, write the test that would fail on the bug you're
-   afraid of.** I was afraid of getting the always-valid property wrong —
-   so the test directly measures that property.
-3. **Capture the bug in the CHANGELOG.** I documented this explicitly in
-   [`CHANGELOG.md`](https://github.com/wavde/experiment-toolkit/blob/main/CHANGELOG.md).
-   Not because I enjoy advertising a bug, but because future me (or future
-   users) need to know that the formula shipped today is the corrected one.
+1. **Known-answer tests catch typos. Property tests catch the bugs you're actually afraid of.** A "does the number look sensible?" test happily passed a 17%-false-positive implementation. A direct Type-I error simulation did not.
+2. **For statistical code, write the test that would fail on the property you care about.** The worry here was losing the always-valid guarantee, so the test measures that property directly.
+3. **Document the bug in the changelog.** See [`CHANGELOG.md`](https://github.com/wavde/experiment-toolkit/blob/main/CHANGELOG.md). Not because advertising a bug is fun, but because anyone running an older tag needs to know which release actually ships the corrected formula.
 
-## The cost of peeking
+## The cost of peeking, as a reference
 
-As a reference point, here's what naive peeking costs you under H0, on the
-same simulation harness:
+The same simulation harness against H0, with one-look and naive-peeking variants:
 
 | Test | Type-I error |
 |---|---|
-| Fixed-horizon z-test (one look at n=5000) | ~5% ✅ |
-| Naive z-test with peeking every 100 users | ~26% ❌ |
-| mSPRT with peeking every 100 users | ~3% ✅ |
+| Fixed-horizon z-test (one look at n=5000) | ~5% |
+| Naive z-test, peeking every 100 users | ~26% |
+| mSPRT, peeking every 100 users | ~3% |
 
-Peeking with the naive test quintuples your false-positive rate. With mSPRT
-you can peek as often as you like and the Type-I guarantee holds.
+Peeking at the naive test roughly quintuples the false-positive rate. mSPRT holds the guarantee.
 
 ## Try it
 
@@ -110,14 +83,10 @@ pip install git+https://github.com/wavde/experiment-toolkit.git
 experiment-toolkit sample-size --mde 0.02 --sd 1.0
 ```
 
-Or read [the implementation](https://github.com/wavde/experiment-toolkit/blob/main/src/experiment_toolkit/sequential.py)
-and the [tests that validate it](https://github.com/wavde/experiment-toolkit/blob/main/tests/test_toolkit.py).
+Or read [the implementation](https://github.com/wavde/experiment-toolkit/blob/main/src/experiment_toolkit/sequential.py) and the [tests](https://github.com/wavde/experiment-toolkit/blob/main/tests/test_toolkit.py).
 
 ## References
 
-- Robbins, H. (1970). *Statistical Methods Related to the Law of the Iterated
-  Logarithm.*
-- Johari, Pekelis, Walsh (2017). *Peeking at A/B Tests: Why it matters, and
-  what to do about it.* (KDD)
-- Howard, Ramdas, McAuliffe, Sekhon (2021). *Time-uniform, Nonparametric,
-  Nonasymptotic Confidence Sequences.* (Annals of Statistics)
+- Robbins, H. (1970). *Statistical Methods Related to the Law of the Iterated Logarithm.*
+- Johari, Pekelis, Walsh (2017). *Peeking at A/B Tests: Why it matters, and what to do about it.* (KDD)
+- Howard, Ramdas, McAuliffe, Sekhon (2021). *Time-uniform, Nonparametric, Nonasymptotic Confidence Sequences.* (Annals of Statistics)

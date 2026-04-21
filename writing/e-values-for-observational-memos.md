@@ -1,98 +1,55 @@
-# E-values: the one-number sensitivity check every observational memo should have
+# E-values: a one-number sensitivity check for observational memos
 
-*~5 min read. Builds on [case 04 of the causal-inference-playbook](https://github.com/wavde/causal-inference-playbook/tree/main/case-studies/04-propensity-score) and the new `e_value` helper in [experiment-toolkit v0.2.0](https://pypi.org/project/experiment-toolkit/).*
+*~5 min read. Companion code in [case 04 of the causal-inference-playbook](https://github.com/wavde/causal-inference-playbook/tree/main/case-studies/04-propensity-score) and `e_value` / `rosenbaum_gamma_threshold` in [experiment-toolkit](https://pypi.org/project/experiment-toolkit/).*
 
----
+## The question every observational memo has to answer
 
-## The question every skeptical reviewer asks
+You've run the observational analysis. Propensity-score matching, IPW, a dose-response regression, pick your flavour. The headline reads something like:
 
-You've done the observational analysis. Maybe propensity score matching,
-maybe IPW, maybe a dose-response regression. You land on:
+> Users in cohort A have 40% higher 90-day retention than cohort B, after matching on onboarding channel, signup device, and first-session activity.
 
-> "Users in cohort A have a 40% higher 90-day retention than cohort B,
-> after matching on onboarding channel, signup device, and first-session
-> activity."
+The question the reviewer asks, sooner or later: *how strong would an unmeasured confounder have to be to explain this away?* Handwaving about "we controlled for everything we had" is not an answer. An E-value is.
 
-Somewhere between draft 2 and the review meeting, the question shows
-up: *"How big would the unmeasured confounder have to be to explain
-this away?"*
+## Definition
 
-You can wave your hands about "well, we controlled for everything we
-could," or you can give them a number. The **E-value** (VanderWeele &
-Ding, 2017, *Annals of Internal Medicine*) is that number.
-
-## What it is
-
-For an observed risk ratio `RR`, the E-value is defined as:
+For an observed risk ratio `RR >= 1`,
 
 $$
-\text{E-value} = RR + \sqrt{RR \cdot (RR - 1)}
+E = RR + \sqrt{RR \cdot (RR - 1)}
 $$
 
-(with the convention that `RR < 1` is replaced by `1/RR` — the scale is
-symmetric). Its interpretation is exact and beautifully conservative:
+(for `RR < 1`, apply the formula to `1/RR`; the scale is symmetric). The interpretation, from VanderWeele & Ding (2017), is the strong part:
 
-> An unmeasured confounder `U` would need to have a risk ratio of at
-> least *E-value* with **both** the treatment and the outcome — above
-> and beyond the measured covariates — to fully explain away the
-> observed association.
+> An unmeasured confounder `U` would have to be associated with both treatment assignment and the outcome with a risk ratio of at least `E`, above and beyond the measured covariates, to fully explain away the observed association.
 
-Crucially, it makes **no assumption** about the distribution of `U`, its
-direction, its binary-vs-continuous nature, or its functional form.
-That's what makes it bulletproof for a memo: there's no
-"well, but if you assume X" a skeptic can hang you on.
+The result assumes nothing about the distribution of `U`, its functional form, or whether it is binary or continuous. That is what makes it a workable number in a memo: no "well, but if you assume X" that a reviewer can hang an objection on.
 
-## Using it in a memo
+## Using it
 
 ```python
 from experiment_toolkit import e_value
 
-# Observed RR = 1.4 with 95% CI [1.15, 1.70]
+# Observed RR = 1.40, 95% CI [1.15, 1.70]
 result = e_value(point_estimate=1.40, lower_ci=1.15)
-
 print(result)
-# E-value (point)=2.159, E-value (CI)=1.559
+# E-value (point)=2.16, E-value (CI)=1.56
 ```
 
-What goes in the memo:
+What the memo paragraph then looks like:
 
-> The observed risk ratio of 1.40 has an E-value of 2.16 at the point
-> estimate and 1.56 at the lower bound of the 95% CI. In plain English:
-> an unmeasured confounder would need to be associated with both
-> treatment assignment and outcome with a risk ratio of at least 1.56 —
-> after accounting for the channel, device, and first-session controls —
-> to move the lower CI bound to the null. That's a bigger association
-> than any of our measured confounders have with either treatment or
-> outcome, which makes the confounder story a hard sell.
+> The observed risk ratio of 1.40 has an E-value of 2.16 at the point estimate and 1.56 at the lower bound of the 95% CI. An unmeasured confounder would need to be associated with both cohort assignment and the outcome with a risk ratio of at least 1.56, after accounting for the channel, device, and first-session controls, to move the lower bound to the null. The strongest measured confounder in this analysis has an outcome RR of roughly 1.3, so a hidden confounder at that scale would not be enough.
 
-The second sentence is the move. You're not just reporting a number,
-you're benchmarking it against *the confounders you already measured*.
-If your biggest measured confounder has RR 1.3 with the outcome, and
-you'd need RR 1.56 for a hidden one, the reader has something concrete
-to reason about.
+The benchmark sentence is the part that earns the paragraph its keep. Reporting the E-value in isolation is easy to dismiss. Reporting it next to the strongest measured confounder gives the reader something concrete to compare against.
 
-## The three things people get wrong
+## Common mistakes
 
-**1. "E-value is the probability the result is real."** It isn't.
-It's a threshold on confounder strength. A large E-value makes the
-confounder story implausible but doesn't make the causal story true.
-
-**2. Reporting only the point-estimate E-value.** Always also report
-the CI-based E-value. An observed RR of 2.0 with a CI of [1.02, 3.9]
-has a CI-based E-value of ~1.16 — the result is fragile at the lower
-bound regardless of how impressive the point estimate looks.
-
-**3. Stopping there.** E-values and Rosenbaum bounds (next section)
-complement each other. E-values work on effect estimates; Rosenbaum
-bounds work on hypothesis tests after matching. Use both.
+1. **Treating `E` as a probability that the effect is real.** It isn't. It's a threshold on confounder strength. A large E-value makes the confounding story implausible; it does not prove the causal story.
+2. **Reporting only the point-estimate E-value.** Always report the CI-based E-value as well. An RR of 2.0 with a CI of [1.02, 3.9] has a CI-based E-value near 1.16, which is fragile regardless of how impressive the point estimate looks.
+3. **Stopping at one sensitivity statistic.** E-values and Rosenbaum bounds answer different questions. Use both where the design supports it.
 
 ## Rosenbaum bounds: the matched-pair version
 
-When your design is **matched pairs** — as in PSM — there's an even
-more mechanical alternative. Rosenbaum (2002) asks: by what odds ratio
-`gamma` could a hidden confounder shift the probability of being the
-treated member of a pair, and at what `gamma` does the one-sided
-Wilcoxon signed-rank test stop rejecting?
+When the design is matched pairs (PSM), Rosenbaum (2002) gives a more mechanical alternative. For each odds ratio `gamma`, ask: could a hidden confounder at that strength flip the result of a one-sided Wilcoxon signed-rank test? Find the smallest `gamma` at which the test no longer rejects.
 
 ```python
 from experiment_toolkit import rosenbaum_gamma_threshold
@@ -103,21 +60,15 @@ print(f"Robust up to gamma = {gamma_star:.2f}")
 # Robust up to gamma = 1.85
 ```
 
-A `gamma*` of 1.85 means: a hidden confounder would need to make one
-member of each pair **1.85x more likely** than the other to be treated,
-above and beyond the matching variables, for the result to stop being
-statistically significant. In health and marketing studies, `gamma*`
-values of 1.3–2.0 are considered moderately robust; >2 is strong;
->3 is unusually strong.
+A `gamma* = 1.85` means: to overturn significance, a hidden confounder would have to make one member of each matched pair roughly 1.85x more likely than the other to have been treated, beyond the matching variables. In applied work, values of 1.3 to 2.0 are usually called moderately robust; above 2 is strong; above 3 is unusually so.
+
+## Where sensitivity analysis stops helping
+
+Both tools quantify robustness to a specific class of violation: unmeasured confounding. They do not help with model misspecification, selection bias in who ends up in the analysis set, or measurement error in the treatment variable. If the concern in the room is that the cohorts are fundamentally different populations doing different things, a bigger E-value does not resolve it. That conversation belongs upstream, in the matching design and the common-support diagnostics.
 
 ## The take-home
 
-Observational causal claims live or die on the plausibility of the
-no-unmeasured-confounding assumption. You can't prove it, but you can
-*quantify the sensitivity* to its violation with two lines of code.
-Make E-values (for effect estimates) and Rosenbaum `gamma*` (for
-matched-pair tests) a standard row in your memo template. Your
-reviewers will stop asking the question.
+Observational causal claims live or die on the plausibility of no-unmeasured-confounding. The assumption can't be proved, but its sensitivity can be quantified. Putting an E-value (for effect estimates) and, where applicable, a Rosenbaum `gamma*` (for matched-pair tests) next to every observational point estimate pushes a predictable reviewer question into the body of the memo, with a number attached.
 
 ---
 
