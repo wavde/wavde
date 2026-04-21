@@ -1,11 +1,12 @@
 # Tejas Wavde
 
-Data scientist working on experimentation, causal inference, and product analytics.
+Data scientist working on paid-media measurement, experimentation, causal inference, and product analytics.
 
-The repositories below are the work I keep public: a set of case studies, a small Python package, and short essays on the methods. The focus is on calculations that have to be defended in writing, which means clean estimators, honest diagnostics, and memos that state their assumptions.
+The repositories below are the work I keep public: case studies on how I measure channels and features, a small Python package, and short essays on the methods. The focus is on calculations that have to be defended in writing, which means clean estimators, honest diagnostics, and memos that state their assumptions.
 
 ## Featured projects
 
+- [**paid-media-playbook**](https://github.com/wavde/paid-media-playbook): five case studies on paid-media measurement — DMA geo lift (synthetic control), multi-touch attribution (rule-based vs Markov vs Shapley), matched-market incrementality / conversion lift, media-mix modeling (MAP + Bayesian side-by-side), and a web-attribution deep dive that accounts for cookie loss and iOS ATT. Synthetic data, recovered ground truth, decision memos.
 - [**causal-inference-playbook**](https://github.com/wavde/causal-inference-playbook): worked case studies covering A/B with CUPED, synthetic control, difference-in-differences (including Callaway-Sant'Anna), propensity score matching with a LaLonde replication, sequential testing, and switchback under SUTVA violation. Each paired with a memo.
 - [**experiment-toolkit**](https://github.com/wavde/experiment-toolkit): a small, typed, tested Python package on PyPI. Sample size and MDE, CUPED, mSPRT, ratio-metric delta method, staggered DiD, E-values, Rosenbaum bounds.
 - [**product-analytics-deepdive**](https://github.com/wavde/product-analytics-deepdive): SQL-first case studies. Funnels, retention cohorts, engagement segmentation, and a north-star metric memo.
@@ -15,6 +16,9 @@ The repositories below are the work I keep public: a set of case studies, a smal
 
 Short essays on methods that show up in the case studies:
 
+- [Last-touch attribution systematically under-credits upper funnel](writing/last-touch-under-credits-upper-funnel.md)
+- [Geo holdouts as paid-media A/B](writing/geo-holdouts-as-paid-media-ab.md)
+- [MMM vs incrementality: what each answers and what neither does](writing/mmm-vs-incrementality.md)
 - [When TWFE lies: staggered rollouts and what Callaway-Sant'Anna buys you](writing/twfe-lies-on-staggered-rollouts.md)
 - [E-values: a one-number sensitivity check for observational memos](writing/e-values-for-observational-memos.md)
 - [CUPED inside sequential testing: two variance reductions that compound](writing/cuped-inside-sequential-testing.md)
