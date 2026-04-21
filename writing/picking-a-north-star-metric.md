@@ -10,7 +10,7 @@ The hard part is that **every candidate metric has a failure mode**, and the job
 
 ## The four candidates I usually see
 
-Take a consumer product with accounts, content, and engagement — a Spotify-shaped business, say. Here are the metrics I'd expect any senior analyst to surface in the first hour:
+Take a consumer product with accounts, content, and engagement — a Spotify-shaped business, say. Here are the metrics I'd expect any analyst to surface in the first hour:
 
 | Metric | What it optimizes for | Goodhart failure mode |
 |---|---|---|

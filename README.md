@@ -1,8 +1,8 @@
 # Hi, I'm Tejas 👋
 
-**Senior Data Scientist — Analytics · Experimentation · Causal Inference**
+**Data Scientist — Analytics · Experimentation · Causal Inference**
 
-I work on experimentation, causal inference, and decision-grade product analytics — the problems senior analytics ICs own at FAANG-scale: experiment design, metric strategy, and turning messy data into decisions.
+I work on experimentation, causal inference, and decision-grade product analytics — the problems analytics ICs own at FAANG-scale: experiment design, metric strategy, and turning messy data into decisions.
 
 ---
 
