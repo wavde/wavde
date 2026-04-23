@@ -26,6 +26,10 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
+## Side projects
+
+- [**games**](https://github.com/wavde/games): twelve classic and logic-puzzle browser games — vanilla HTML/CSS/JS, no build. Generators, solvers, daily-seed puzzles. [Play →](https://wavde.github.io/games/)
+
 ## Elsewhere
 
 - Site: [wavde.github.io](https://wavde.github.io)
