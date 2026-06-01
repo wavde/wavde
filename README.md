@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [When boosting loses to SARIMA: baselines, MASE, and honest backtests](writing/when-boosting-loses-to-sarima.md)
 - [Last-touch attribution systematically under-credits upper funnel](writing/last-touch-under-credits-upper-funnel.md)
 - [Geo holdouts as paid-media A/B](writing/geo-holdouts-as-paid-media-ab.md)
 - [MMM vs incrementality: what each answers and what neither does](writing/mmm-vs-incrementality.md)

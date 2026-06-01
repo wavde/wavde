@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [When boosting loses to SARIMA: baselines, MASE, and honest backtests](when-boosting-loses-to-sarima.md)
 - [Last-touch attribution systematically under-credits upper funnel](last-touch-under-credits-upper-funnel.md)
 - [Geo holdouts as paid-media A/B](geo-holdouts-as-paid-media-ab.md)
 - [MMM vs incrementality: what each answers and what neither does](mmm-vs-incrementality.md)
