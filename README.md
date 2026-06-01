@@ -35,3 +35,7 @@ Short essays on methods that show up in the case studies:
 
 - Site: [wavde.github.io](https://wavde.github.io)
 - GitHub: [@wavde](https://github.com/wavde)
+
+## Usage note
+
+Essays and profile content © 2026 Tejas Wavde. Please link back when quoting or referencing this work.

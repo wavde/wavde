@@ -36,7 +36,7 @@ Two things to notice. First, the point estimate overshoots the truth (9.6% vs 8%
 
 MMM quarterly gives you a ROAS curve per channel, which is the right object to allocate budget against. Geo quarterly is impossible to run at the per-channel grain, because you cannot independently pause each of five channels in each of three cities without the combinatorics blowing up the DMA budget.
 
-Geo annually gives you a causal lift estimate for *one or two* of the biggest campaigns, with a real counterfactual. That is the right object to *calibrate* MMM against. If the MMM reports display at ROAS 2.0 and a geo test on display returns an incremental return of 3.5, the MMM's decay and half-saturation parameters for display are wrong, and the rest of its ROAS estimates are suspect until you refit with the geo lift as an informative prior.
+Running geo once or twice a year gives you causal lift estimates for the biggest campaigns, with real counterfactuals. That is the right object to *calibrate* MMM against. If the MMM reports display at ROAS 2.0 and a geo test on display returns an incremental return of 3.5, the MMM's decay and half-saturation parameters for display are wrong, and the rest of its ROAS estimates are suspect until you refit with the geo lift as an informative prior.
 
 The cleanest pairing I've run:
 
