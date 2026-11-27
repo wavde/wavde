@@ -38,7 +38,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). Ten loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, and a replication of the targeting check on a second public dataset. Round 3 is complete, the third plan review is done, and the propensity-vs-uplift essay is revised in light of the replication. Next up is a CI smoke run for demand-forecasting.
+Next up: [contribution plan](contribution-plan.md). Ten loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, and a replication of the targeting check on a second public dataset. Round 3 is complete, the third plan review is done, and the propensity-vs-uplift essay is revised in light of the replication. demand-forecasting's pipelines now smoke-run in CI. Next up is judge drift without a version boundary.
 
 ## Side projects
 

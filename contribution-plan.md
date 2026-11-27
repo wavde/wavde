@@ -94,7 +94,7 @@ All three round 3 themes shipped and met the finish criteria. No loop stalled.
 2. **Fix: add a CI smoke run to demand-forecasting**, closing the last gap from the first review's process change.
 3. **New loop: judge drift without a version boundary.** Decision: how can a team detect and handle a judge that changes silently during a test? Builds on loop 9.
 
-Priority 1 is done: the loop 6 essay's recommendation, decision rule and generalising sections now say which dataset supports each claim. Next up: priority 2.
+Priority 1 is done: the loop 6 essay's recommendation, decision rule and generalising sections now say which dataset supports each claim. Priority 2 is done: demand-forecasting's CI now smoke-runs `run.py` and `run_pretrained.py` on synthetic data with the UCI schema, using a seasonal-naive stub in place of Chronos-Bolt (no download, no torch) ([demand-forecasting#3](https://github.com/wavde/demand-forecasting/pull/3)). Every repo's evidence pipelines now run in CI. Next up: priority 3, judge drift without a version boundary.
 
 ## Round 3 themes (done)
 
