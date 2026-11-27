@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](silent-judge-drift.md)
 - [It didn't replicate: propensity vs uplift targeting on a second randomized dataset](uplift-targeting-replication-hillstrom.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](judge-drift-mid-test.md)
 - [A staggered rollout can't see novelty: holdout vs rollout for opt-in AI features](staggered-rollout-vs-holdout.md)
