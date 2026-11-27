@@ -58,7 +58,7 @@ Ranked by AI relevance and by how directly each one answers a gap above.
 2. **Public-data check of uplift vs propensity targeting.** Decision: on a real randomized ad dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says? Evidence: a replication in paid-media-playbook on the public Criteo uplift dataset, which comes from a randomized trial. This answers the synthetic-data gap.
 3. **Cheaper corrections.** Decision: how far can sequential monitoring and variance reduction cut the cost of a valid answer? Candidates are combining PPI++ with CUPED-style covariates for the label budget, and staggered-rollout power versus a fixed holdout for opt-in features. It builds on experiment-toolkit's mSPRT and CUPED modules.
 
-Next up: theme 3, cheaper corrections. Theme 1 is done (loop 5) and theme 2 is done (loop 6).
+All three themes from this review are done: theme 1 (loop 5), theme 2 (loop 6) and theme 3 (loop 7, the PPI++ covariate candidate). The plan is due for its next review. The staggered-rollout candidate from theme 3 is still open.
 
 ## Completed themes
 
@@ -88,6 +88,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | Measurement in AI-mediated marketing | Done | [paid-media-playbook#1](https://github.com/wavde/paid-media-playbook/pull/1), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/06-ai-mediated-measurement/results.md) | [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md) |
 | Offline evals vs online A/B | Done | [experiment-toolkit#2](https://github.com/wavde/experiment-toolkit/pull/2), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/offline_online_results.md) | [An offline eval win is evidence about the eval set](writing/offline-evals-vs-online-ab.md) |
 | Propensity vs uplift targeting on real randomized data | Done | [paid-media-playbook#3](https://github.com/wavde/paid-media-playbook/pull/3), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/07-criteo-uplift/results.md) | [The targeting model already knows who would convert](writing/propensity-vs-uplift-targeting-criteo.md) |
+| PPI++ with a pre-treatment covariate | Done | [experiment-toolkit#4](https://github.com/wavde/experiment-toolkit/pull/4), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/ppi_covariates_results.md) | [A covariate stacks on the judge, but a better judge beats both](writing/ppi-with-covariates-label-budget.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -124,3 +125,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** the first loop on public data, with a randomized baseline. It confirmed loop 4's two targeting warnings. Credited / incremental visits rose from 4.71x (everyone) to 8.58x (top 5% by propensity). The marginal return from 10% to 40% reach was 0.15 of the average for visits and 0.04 for conversions. CI now smoke-runs the pipeline on synthetic data with the real schema.
 - **Didn't:** loop 4's simulation assumed high-intent users respond slightly less to ads. On Criteo, absolute uplift rises steeply with propensity: the top 20% by propensity hold 72.2% of incremental visits. So the uplift model won only at tight reach on visits (45.7% vs 28.9% of incremental at 5%) and not on rare conversions (53.1% vs 59.1%). This is one advertiser with anonymized features and simple models, and the SEs exclude model-fitting noise.
 - **Next question:** theme 3, cheaper corrections. Loops 1, 4 and 5 all ended with correct but expensive answers. How far can sequential monitoring and variance reduction cut the cost?
+
+### Retro: PPI++ with a pre-treatment covariate
+
+- **Held up:** the closed-form label budgets reproduced loop 1's PPI++ numbers exactly (982 / 2,397 / 3,610) and matched simulation. At judge accuracy 0.85, a covariate with R² 0.25 cut labels for 80% power from 2,397 to 2,072, and one with R² 0.50 cut them to 1,625. The CI smoke step caught nothing because nothing broke, which is the point.
+- **Didn't:** the gain is smaller than the covariate's own R² suggests. It overlaps with the judge (combined R² 0.557, not 0.48 + 0.25), so it saved only 6% with a 0.95 judge and 5% when labels were 71% of a 5,000-unit arm. Improving the judge from 0.85 to 0.95 saved more than any covariate in the grid. The model is binary, with one covariate and judge errors that depend only on quality. One validation row showed 0.063 Type-I on the committed seed, and human-only showed 0.056 on the same draws.
+- **Next question:** the plan is due for review. Candidates: the open staggered-rollout question from theme 3, a covariate that predicts where the judge is wrong, and CI smoke runs for the causal-inference-playbook and demand-forecasting evidence.

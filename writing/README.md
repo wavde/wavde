@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](ppi-with-covariates-label-budget.md)
 - [The targeting model already knows who would convert: propensity vs uplift on real randomized data](propensity-vs-uplift-targeting-criteo.md)
 - [An offline eval win is evidence about the eval set: offline LLM evals vs online A/B](offline-evals-vs-online-ab.md)
 - [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md)
