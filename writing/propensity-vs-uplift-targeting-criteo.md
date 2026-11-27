@@ -2,6 +2,8 @@
 
 *~7 min read. Companion code is [case 07](https://github.com/wavde/paid-media-playbook/tree/main/case-studies/07-criteo-uplift) in paid-media-playbook, with [tests](https://github.com/wavde/paid-media-playbook/blob/main/tests/test_criteo_uplift.py) and the [generated results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/07-criteo-uplift/results.md). It checks the simulation in [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) against real data.*
 
+> **Update:** a replication on a second randomized dataset, a retailer's e-mail experiment, did not reproduce the concentration finding below. There, the top 20% of customers by propensity reached 25.9% of incremental visits, not 72.2%. Credit inflation and falling marginal returns did replicate, but they were weaker. See [It didn't replicate](uplift-targeting-replication-hillstrom.md). Treat the uplift-vs-propensity conclusion here as specific to this dataset.
+
 ## The recommendation
 
 Treat platform-credited results from a tightly targeted campaign as an upper bound, not as incrementality. Price any budget increase with a marginal test, never with the average lift at the current reach. And don't assume an uplift model beats the platform's propensity targeting: test that against a randomized holdout at the reach you actually buy.

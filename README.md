@@ -6,7 +6,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 ## Featured projects
 
-- [**paid-media-playbook**](https://github.com/wavde/paid-media-playbook): seven case studies on paid-media measurement — DMA geo lift (synthetic control), multi-touch attribution (rule-based vs Markov vs Shapley), matched-market incrementality / conversion lift, media-mix modeling (MAP + Bayesian side-by-side), a web-attribution deep dive that accounts for cookie loss and iOS ATT, measurement when the ad platform's model controls targeting, creative, and pacing, and propensity vs uplift targeting on the public Criteo randomized uplift dataset. Synthetic data with recovered ground truth (plus one public randomized dataset), and decision memos.
+- [**paid-media-playbook**](https://github.com/wavde/paid-media-playbook): eight case studies on paid-media measurement — DMA geo lift (synthetic control), multi-touch attribution (rule-based vs Markov vs Shapley), matched-market incrementality / conversion lift, media-mix modeling (MAP + Bayesian side-by-side), a web-attribution deep dive that accounts for cookie loss and iOS ATT, measurement when the ad platform's model controls targeting, creative, and pacing, propensity vs uplift targeting on the public Criteo randomized uplift dataset, and a replication of that check on the Hillstrom randomized e-mail experiment. Synthetic data with recovered ground truth (plus two public randomized datasets), and decision memos.
 - [**causal-inference-playbook**](https://github.com/wavde/causal-inference-playbook): worked case studies covering A/B with CUPED, synthetic control, difference-in-differences (including Callaway-Sant'Anna), propensity score matching with a LaLonde replication, sequential testing, switchback under SUTVA violation, observational estimates for an opt-in AI feature, and staggered rollout vs fixed holdout for measuring one. Each paired with a memo.
 - [**demand-forecasting**](https://github.com/wavde/demand-forecasting): daily demand forecasting on UCI Online Retail II — seasonal-naive baseline, ETS / SARIMA / LightGBM, and a leakage-free rolling-origin backtest. SARIMA reaches MASE 0.74, 18.5% below baseline; a two-way fixed-effects difference-in-differences recovers a known +15% promo uplift. A zero-shot Chronos-Bolt comparison on the same backtest shows where a pretrained forecaster wins (short history) and where it doesn't. [Write-up →](https://wavde.github.io/demand-forecasting.html)
 - [**experiment-toolkit**](https://github.com/wavde/experiment-toolkit): a small, typed, tested Python package on PyPI. Sample size and MDE, CUPED, mSPRT, ratio-metric delta method, staggered DiD, E-values, Rosenbaum bounds. Unreleased on main: PPI++ for A/B tests scored by an LLM judge, PPI++ with a pre-treatment covariate and closed-form label budgets, what a mid-test judge upgrade does to the analysis, and a simulation of when offline LLM evals predict online A/B results.
@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [It didn't replicate: propensity vs uplift targeting on a second randomized dataset](writing/uplift-targeting-replication-hillstrom.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md)
 - [A staggered rollout can't see novelty: holdout vs rollout for opt-in AI features](writing/staggered-rollout-vs-holdout.md)
 - [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](writing/ppi-with-covariates-label-budget.md)
@@ -37,7 +38,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). Nine loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, and judge drift mid-test. Next up is a second public randomized dataset.
+Next up: [contribution plan](contribution-plan.md). Ten loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, and a replication of the targeting check on a second public dataset. Round 3 is complete, and the plan is due for its third review.
 
 ## Side projects
 
