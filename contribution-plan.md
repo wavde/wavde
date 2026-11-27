@@ -37,7 +37,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 3. **Honest baselines for AI forecasting.** When pretrained time-series models beat a tuned SARIMA under the same rolling-origin backtest, and when they don't. Builds on demand-forecasting and the "When boosting loses to SARIMA" essay.
 4. **Measurement in AI-mediated marketing.** What incrementality and MMM can and can't say when targeting and creative are model-driven. Builds on paid-media-playbook.
 
-## Recommended first contribution (proposed)
+## Recommended first contribution (done)
 
 **"LLM-as-judge is a noisy metric: what it does to A/B power and bias."**
 
@@ -52,4 +52,10 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 
 | Loop | Status | Evidence | Essay |
 |---|---|---|---|
-| LLM-as-judge noise in A/B tests | Proposed | — | — |
+| LLM-as-judge noise in A/B tests | Done | [experiment-toolkit#1](https://github.com/wavde/experiment-toolkit/pull/1), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/llm_judge_results.md) | [LLM-as-judge is a noisy metric](writing/llm-judge-noise-in-ab-tests.md) |
+
+### Retro: LLM-as-judge noise in A/B tests
+
+- **Held up:** the closed-form bias, variance, Type-I, and power matched the simulation in every scenario, and PPI++ with labels drawn within each arm kept Type-I near 5% under differential judge error while the naive test's false-positive rate climbed toward 1 with sample size.
+- **Didn't:** the model is binary-only with a fixed judge (no drift), and at realistic label budgets the correction costs a lot of power (0.25 for PPI++ vs 0.59 for the naive metric at 5,000 units and 500 labels per arm), so the label budget is the binding constraint.
+- **Next question:** theme 3. Does a pretrained time-series forecaster beat a tuned SARIMA on the existing demand-forecasting rolling-origin backtest?
