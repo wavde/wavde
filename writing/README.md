@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [Upgrading the judge mid-test is safe only if your labels know about it](judge-drift-mid-test.md)
 - [A staggered rollout can't see novelty: holdout vs rollout for opt-in AI features](staggered-rollout-vs-holdout.md)
 - [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](ppi-with-covariates-label-budget.md)
 - [The targeting model already knows who would convert: propensity vs uplift on real randomized data](propensity-vs-uplift-targeting-criteo.md)

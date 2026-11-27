@@ -78,7 +78,7 @@ All three themes from the first review shipped and met the finish criteria. No l
 2. **Judge drift during a test.** Decision: what happens to a judge-scored A/B test when the judge model is upgraded mid-test, and how should the analysis handle it? Builds on experiment-toolkit's `llm_judge`.
 3. **A second public randomized dataset.** Decision: does loop 6's finding (uplift concentrates in high-propensity users) hold for a different advertiser and channel? Candidate data: the Hillstrom email-marketing experiment.
 
-Theme 1 is done (loop 8). Next up: theme 2, judge drift during a test.
+Theme 1 is done (loop 8) and theme 2 is done (loop 9). Next up: theme 3, a second public randomized dataset.
 
 ## Round 2 themes (done)
 
@@ -120,6 +120,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | Propensity vs uplift targeting on real randomized data | Done | [paid-media-playbook#3](https://github.com/wavde/paid-media-playbook/pull/3), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/07-criteo-uplift/results.md) | [The targeting model already knows who would convert](writing/propensity-vs-uplift-targeting-criteo.md) |
 | PPI++ with a pre-treatment covariate | Done | [experiment-toolkit#4](https://github.com/wavde/experiment-toolkit/pull/4), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/ppi_covariates_results.md) | [A covariate stacks on the judge, but a better judge beats both](writing/ppi-with-covariates-label-budget.md) |
 | Staggered rollout vs fixed holdout | Done | [causal-inference-playbook#11](https://github.com/wavde/causal-inference-playbook/pull/11), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/08-rollout-vs-holdout/results.md) | [A staggered rollout can't see novelty](writing/staggered-rollout-vs-holdout.md) |
+| Judge drift mid-test | Done | [experiment-toolkit#6](https://github.com/wavde/experiment-toolkit/pull/6), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/judge_drift_results.md) | [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -168,3 +169,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** it answered the question loop 3 left open, using loop 3's own adoption model. All three designs withheld 10% of user-weeks, and every estimate was centred on its truth with 93.6–95.9% coverage. The staggered rollout had the most precise short-run read (SE 0.0175 vs 0.0285), but it shipped a fading novelty effect in 100.0% of replications, against 4.7% for the fixed holdout. causal-inference-playbook now smoke-runs cases 07 and 08 in CI, which closes that repo's gap from the review.
 - **Didn't:** the hybrid design wasn't the compromise I expected. At equal cost, its 5% holdout shipped a flat effect only 63.1% of the time, against 90.9% for the fixed holdout. The model has one effect shape at a time, adoption at access, no interference, and an 8-week "long run". demand-forecasting still has no CI smoke run.
 - **Next question:** theme 2. What happens to a judge-scored A/B test when the judge model is upgraded mid-test?
+
+### Retro: Judge drift mid-test
+
+- **Held up:** it removed the fixed-judge assumption every LLM-judge retro had flagged, using loop 1's PPI++ unchanged. Closed forms matched the simulation, including the large-sample bias of front-loaded labels (+0.0141 simulated against +0.0139 expected). An upgrade that shifts both arms the same way left every analysis's Type-I between 0.048 and 0.051. When the new judge was more lenient on treatment, PPI++ with labels spread across the test (0.042) or stratified by judge version (0.050) stayed valid.
+- **Didn't:** front-loaded labeling, a common practice, keeps about 70% of the naive bias. Its Type-I error rises from 0.064 to 0.392 as labels go from 250 to 4,000 per arm. I expected partial calibration to help more. The model has one upgrade at a known time, binary quality, and fixed per-arm leniency. Silent drift with no version boundary isn't covered.
+- **Next question:** theme 3. Does loop 6's finding (uplift concentrates in high-propensity users) hold on a second public randomized dataset, with a different advertiser and channel?
