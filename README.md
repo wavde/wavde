@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [LLM-as-judge is a noisy metric: what it does to A/B power and bias](writing/llm-judge-noise-in-ab-tests.md)
 - [When boosting loses to SARIMA: baselines, MASE, and honest backtests](writing/when-boosting-loses-to-sarima.md)
 - [Last-touch attribution systematically under-credits upper funnel](writing/last-touch-under-credits-upper-funnel.md)
 - [Geo holdouts as paid-media A/B](writing/geo-holdouts-as-paid-media-ab.md)
