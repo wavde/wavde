@@ -78,7 +78,7 @@ All three themes from the first review shipped and met the finish criteria. No l
 2. **Judge drift during a test.** Decision: what happens to a judge-scored A/B test when the judge model is upgraded mid-test, and how should the analysis handle it? Builds on experiment-toolkit's `llm_judge`.
 3. **A second public randomized dataset.** Decision: does loop 6's finding (uplift concentrates in high-propensity users) hold for a different advertiser and channel? Candidate data: the Hillstrom email-marketing experiment.
 
-Next up: theme 1, staggered rollout vs fixed holdout.
+Theme 1 is done (loop 8). Next up: theme 2, judge drift during a test.
 
 ## Round 2 themes (done)
 
@@ -119,6 +119,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | Offline evals vs online A/B | Done | [experiment-toolkit#2](https://github.com/wavde/experiment-toolkit/pull/2), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/offline_online_results.md) | [An offline eval win is evidence about the eval set](writing/offline-evals-vs-online-ab.md) |
 | Propensity vs uplift targeting on real randomized data | Done | [paid-media-playbook#3](https://github.com/wavde/paid-media-playbook/pull/3), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/07-criteo-uplift/results.md) | [The targeting model already knows who would convert](writing/propensity-vs-uplift-targeting-criteo.md) |
 | PPI++ with a pre-treatment covariate | Done | [experiment-toolkit#4](https://github.com/wavde/experiment-toolkit/pull/4), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/ppi_covariates_results.md) | [A covariate stacks on the judge, but a better judge beats both](writing/ppi-with-covariates-label-budget.md) |
+| Staggered rollout vs fixed holdout | Done | [causal-inference-playbook#11](https://github.com/wavde/causal-inference-playbook/pull/11), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/08-rollout-vs-holdout/results.md) | [A staggered rollout can't see novelty](writing/staggered-rollout-vs-holdout.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -161,3 +162,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** the closed-form label budgets reproduced loop 1's PPI++ numbers exactly (982 / 2,397 / 3,610) and matched simulation. At judge accuracy 0.85, a covariate with R² 0.25 cut labels for 80% power from 2,397 to 2,072, and one with R² 0.50 cut them to 1,625. The CI smoke step caught nothing because nothing broke, which is the point.
 - **Didn't:** the gain is smaller than the covariate's own R² suggests. It overlaps with the judge (combined R² 0.557, not 0.48 + 0.25), so it saved only 6% with a 0.95 judge and 5% when labels were 71% of a 5,000-unit arm. Improving the judge from 0.85 to 0.95 saved more than any covariate in the grid. The model is binary, with one covariate and judge errors that depend only on quality. One validation row showed 0.063 Type-I on the committed seed, and human-only showed 0.056 on the same draws.
 - **Next question:** the plan is due for review. Candidates: the open staggered-rollout question from theme 3, a covariate that predicts where the judge is wrong, and CI smoke runs for the causal-inference-playbook and demand-forecasting evidence.
+
+### Retro: Staggered rollout vs fixed holdout
+
+- **Held up:** it answered the question loop 3 left open, using loop 3's own adoption model. All three designs withheld 10% of user-weeks, and every estimate was centred on its truth with 93.6–95.9% coverage. The staggered rollout had the most precise short-run read (SE 0.0175 vs 0.0285), but it shipped a fading novelty effect in 100.0% of replications, against 4.7% for the fixed holdout. causal-inference-playbook now smoke-runs cases 07 and 08 in CI, which closes that repo's gap from the review.
+- **Didn't:** the hybrid design wasn't the compromise I expected. At equal cost, its 5% holdout shipped a flat effect only 63.1% of the time, against 90.9% for the fixed holdout. The model has one effect shape at a time, adoption at access, no interference, and an 8-week "long run". demand-forecasting still has no CI smoke run.
+- **Next question:** theme 2. What happens to a judge-scored A/B test when the judge model is upgraded mid-test?
