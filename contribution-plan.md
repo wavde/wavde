@@ -78,7 +78,7 @@ All three themes from the first review shipped and met the finish criteria. No l
 2. **Judge drift during a test.** Decision: what happens to a judge-scored A/B test when the judge model is upgraded mid-test, and how should the analysis handle it? Builds on experiment-toolkit's `llm_judge`.
 3. **A second public randomized dataset.** Decision: does loop 6's finding (uplift concentrates in high-propensity users) hold for a different advertiser and channel? Candidate data: the Hillstrom email-marketing experiment.
 
-Theme 1 is done (loop 8) and theme 2 is done (loop 9). Next up: theme 3, a second public randomized dataset.
+All three round 3 themes are done: theme 1 (loop 8), theme 2 (loop 9) and theme 3 (loop 10). The plan is due for its third review before another loop starts.
 
 ## Round 2 themes (done)
 
@@ -121,6 +121,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | PPI++ with a pre-treatment covariate | Done | [experiment-toolkit#4](https://github.com/wavde/experiment-toolkit/pull/4), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/ppi_covariates_results.md) | [A covariate stacks on the judge, but a better judge beats both](writing/ppi-with-covariates-label-budget.md) |
 | Staggered rollout vs fixed holdout | Done | [causal-inference-playbook#11](https://github.com/wavde/causal-inference-playbook/pull/11), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/08-rollout-vs-holdout/results.md) | [A staggered rollout can't see novelty](writing/staggered-rollout-vs-holdout.md) |
 | Judge drift mid-test | Done | [experiment-toolkit#6](https://github.com/wavde/experiment-toolkit/pull/6), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/judge_drift_results.md) | [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md) |
+| Propensity vs uplift on a second randomized dataset (Hillstrom) | Done | [paid-media-playbook#5](https://github.com/wavde/paid-media-playbook/pull/5), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/08-hillstrom-email-uplift/results.md) | [It didn't replicate](writing/uplift-targeting-replication-hillstrom.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -175,3 +176,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** it removed the fixed-judge assumption every LLM-judge retro had flagged, using loop 1's PPI++ unchanged. Closed forms matched the simulation, including the large-sample bias of front-loaded labels (+0.0141 simulated against +0.0139 expected). An upgrade that shifts both arms the same way left every analysis's Type-I between 0.048 and 0.051. When the new judge was more lenient on treatment, PPI++ with labels spread across the test (0.042) or stratified by judge version (0.050) stayed valid.
 - **Didn't:** front-loaded labeling, a common practice, keeps about 70% of the naive bias. Its Type-I error rises from 0.064 to 0.392 as labels go from 250 to 4,000 per arm. I expected partial calibration to help more. The model has one upgrade at a known time, binary quality, and fixed per-arm leniency. Silent drift with no version boundary isn't covered.
 - **Next question:** theme 3. Does loop 6's finding (uplift concentrates in high-propensity users) hold on a second public randomized dataset, with a different advertiser and channel?
+
+### Retro: Propensity vs uplift on a second randomized dataset (Hillstrom)
+
+- **Held up:** the replication worked as a check. It reused loop 6's models and readouts unchanged (the helpers are now shared, and case 07's results are byte-identical). Two of loop 6's findings replicated in direction: credited visits overstate incremental visits (2.74x when e-mailing everyone), and under propensity targeting the marginal return is below the average (0.67). Cross-fitting and a bootstrap with explicit "not estimable" ratios kept a small dataset honest.
+- **Didn't:** loop 6's headline didn't replicate. The top 20% by propensity reached 25.9% of incremental visits here, against 72.2% on Criteo, so "propensity targeting already finds the persuadable users" is channel-specific. Loop 6's decision rule needs revising to "test it on your own holdout". The dataset is small (about 212 incremental conversions, so conversion results are mostly noise), there's no license so it's downloaded at runtime, and two datasets can show the finding isn't general but not why.
+- **Next question:** round 3 is complete, and the plan is due for its third review before another loop starts. Open items for that review: revise loop 6's essay rule in light of this result, add a CI smoke run in demand-forecasting, and cover judge drift without a version boundary.
