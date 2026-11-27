@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](writing/pretrained-forecasters-vs-sarima.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](writing/llm-judge-noise-in-ab-tests.md)
 - [When boosting loses to SARIMA: baselines, MASE, and honest backtests](writing/when-boosting-loses-to-sarima.md)
 - [Last-touch attribution systematically under-credits upper funnel](writing/last-touch-under-credits-upper-funnel.md)
@@ -29,7 +30,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). The first loop, on LLM-as-judge metrics, is done. The remaining themes are proposed, not finished work.
+Next up: [contribution plan](contribution-plan.md). The first two loops, on LLM-as-judge metrics and pretrained forecasters, are done. The remaining themes are proposed, not finished work.
 
 ## Side projects
 
