@@ -29,7 +29,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). These are proposed topics, not finished work.
+Next up: [contribution plan](contribution-plan.md). The first loop, on LLM-as-judge metrics, is done. The remaining themes are proposed, not finished work.
 
 ## Side projects
 
