@@ -32,7 +32,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). All four planned loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, and AI-mediated marketing measurement. The plan is due for review before the next loop.
+Next up: [contribution plan](contribution-plan.md). All four planned loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, and AI-mediated marketing measurement. The post-loop review is done; next up is offline evals vs online A/B for LLM features.
 
 ## Side projects
 

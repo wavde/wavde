@@ -28,9 +28,41 @@ Run one loop at a time. Don't start the next one until the current one meets its
 
 One loop at a time, paced by the finish criteria rather than a calendar. Review this plan after every completed loop, or every six weeks if nothing has shipped, and cut scope if a loop has stalled.
 
-## Prioritized themes (proposed)
+## Review after loops 1–4
 
-The order reflects AI relevance and how much existing work each theme can reuse.
+All four themes shipped, and each one met the finish criteria. No loop stalled, so nothing is cut.
+
+**What held up across loops**
+
+- Simulations where the ground truth is known by construction worked as evidence. Each loop showed the simulated value next to the true value, and the code that produced each number is linked.
+- One command with a fixed seed and byte-identical reruns was achievable every time. Building the evidence in an existing repo kept each loop small.
+- The decision rules share one theme: **randomize at the decision you're making.** That means human labels within each arm (loop 1), a holdout or staggered rollout instead of an opt-in comparison (loop 3), and a two-cell budget split or an audience-fixed creative test (loop 4).
+
+**What didn't**
+
+- Three of the four loops rest on synthetic data with one mechanism switched on at a time. Only loop 2 used public data. A skeptical reviewer's first question will be whether any of this shows up in real data.
+- The corrections are expensive. PPI++ power was 0.25 at a realistic label budget (loop 1). The two-cell split needed 2,000,000 users (loop 4). The fake-launch placebo can't detect adoption timed to a post-launch rise in need (loop 3). Most of the cost problems are still unaddressed.
+- Theme 1 is only partly covered. Offline-vs-online disagreement and guardrails were in scope but not built.
+- CI in the repos runs the tests, not the evidence pipelines. In loop 2, `run.py` was broken from a clean install until the loop caught it.
+
+**Changes for the next round**
+
+- At least one loop uses public, randomized data instead of a simulation.
+- Every evidence command gets a CI smoke run, a reduced-size run of the same pipeline, so a clean-install break is caught automatically.
+
+## Next themes (proposed)
+
+Ranked by AI relevance and by how directly each one answers a gap above.
+
+1. **Offline evals vs online A/B for LLM features.** Decision: when can an offline eval win be trusted to predict, or replace, an online test of an LLM feature? Evidence: a simulation in experiment-toolkit where the offline eval set differs from live traffic (prompt mix, judge bias, and the effect varies by segment). It measures how often the offline winner loses online, and whether reweighting the eval set to the traffic mix fixes it. This closes the open part of theme 1.
+2. **Public-data check of uplift vs propensity targeting.** Decision: on a real randomized ad dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says? Evidence: a replication in paid-media-playbook on the public Criteo uplift dataset, which comes from a randomized trial. This answers the synthetic-data gap.
+3. **Cheaper corrections.** Decision: how far can sequential monitoring and variance reduction cut the cost of a valid answer? Candidates are combining PPI++ with CUPED-style covariates for the label budget, and staggered-rollout power versus a fixed holdout for opt-in features. It builds on experiment-toolkit's mSPRT and CUPED modules.
+
+Next up: theme 1, offline evals vs online A/B.
+
+## Completed themes
+
+The order reflects AI relevance and how much existing work each theme can reuse. All four are done; see the log below.
 
 1. **Measuring AI features with experiments.** Online evaluation of LLM-backed features: noisy or model-graded outcome metrics, offline-vs-online disagreement, and guardrails. Builds on experiment-toolkit and the CUPED and sequential-testing essays.
 2. **Causal questions about AI adoption.** Selection into AI-feature usage, opt-in bias, and when observational impact estimates are usable. Builds on the DiD, PSM/AIPW, and E-value work in causal-inference-playbook.
@@ -45,8 +77,6 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Evidence:** A simulation in experiment-toolkit with no model API calls. True quality outcomes are generated, then passed through a judge with configurable error rates, including error that differs between arms. The simulation measures bias, variance, Type-I error, and power, and compares naive analysis with a correction that uses a small human-labeled calibration sample.
 - **Why first:** It is AI-relevant, reuses the existing simulation and testing style (including the Type-I check from the mSPRT post), needs no new infrastructure, and is a judgment call that comes up in practice.
 - **Done when:** It meets the finish criteria above, and the essay ends with a short decision rule for when a judge-scored metric is acceptable as the primary metric.
-
-Next up, once the first loop is done: theme 3, a pretrained-forecaster comparison on the existing demand-forecasting backtest.
 
 ## Log
 
@@ -79,4 +109,4 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 
 - **Held up:** each tool was unbiased for the question it can answer. The ghost-ads holdout stayed within ±0.7% bias at every targeting sharpness, the two-cell budget split estimated marginal iROAS at 0.90 against a true 0.90 and never recommended an unprofitable scale-up, and the audience-fixed creative test declared no winner in 93% of replications when there was none.
 - **Didn't:** the mechanisms are switched on one at a time with chosen effect sizes, the ghost-ads holdouts are assumed clean, the two-cell result needs 2,000,000 users per test, and the MMM is a best-case OLS with known transforms. Using the lift test as a prior was weaker than expected: +48% ROI bias at a spend–demand correlation of 0.6.
-- **Next question:** all four themes are done, so the plan is due for its post-loop review before another loop starts.
+- **Next question:** all four themes are done, so the plan is due for its post-loop review before another loop starts. That review is in "Review after loops 1–4" above.
