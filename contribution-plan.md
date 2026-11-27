@@ -58,7 +58,7 @@ Ranked by AI relevance and by how directly each one answers a gap above.
 2. **Public-data check of uplift vs propensity targeting.** Decision: on a real randomized ad dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says? Evidence: a replication in paid-media-playbook on the public Criteo uplift dataset, which comes from a randomized trial. This answers the synthetic-data gap.
 3. **Cheaper corrections.** Decision: how far can sequential monitoring and variance reduction cut the cost of a valid answer? Candidates are combining PPI++ with CUPED-style covariates for the label budget, and staggered-rollout power versus a fixed holdout for opt-in features. It builds on experiment-toolkit's mSPRT and CUPED modules.
 
-Next up: theme 2, the public-data check of uplift vs propensity targeting. Theme 1 is done (loop 5).
+Next up: theme 3, cheaper corrections. Theme 1 is done (loop 5) and theme 2 is done (loop 6).
 
 ## Completed themes
 
@@ -87,6 +87,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | Opt-in AI adoption and observational bias | Done | [causal-inference-playbook#9](https://github.com/wavde/causal-inference-playbook/pull/9), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/07-ai-feature-adoption/results.md) | [Opt-in AI features](writing/opt-in-ai-adoption-observational-bias.md) |
 | Measurement in AI-mediated marketing | Done | [paid-media-playbook#1](https://github.com/wavde/paid-media-playbook/pull/1), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/06-ai-mediated-measurement/results.md) | [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md) |
 | Offline evals vs online A/B | Done | [experiment-toolkit#2](https://github.com/wavde/experiment-toolkit/pull/2), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/offline_online_results.md) | [An offline eval win is evidence about the eval set](writing/offline-evals-vs-online-ab.md) |
+| Propensity vs uplift targeting on real randomized data | Done | [paid-media-playbook#3](https://github.com/wavde/paid-media-playbook/pull/3), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/07-criteo-uplift/results.md) | [The targeting model already knows who would convert](writing/propensity-vs-uplift-targeting-criteo.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -117,3 +118,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** each offline correction removed the failure it targets, and the simulated means matched their closed-form values. Under mix shift, the raw offline judge shipped a change that hurts live traffic in 100% of replications and the reweighted readouts in 0–1%. Under a lenient judge, PPI++ cut false ships from 53% (reweighted) to 3%. The new CI smoke step (from the plan review) ran both evidence scripts on the first PR.
 - **Didn't:** the corrections are expensive and still can't see online-only costs. On a real win, shipping fell from 87% (raw) to 49% (reweighted) to 25% (PPI++). PPI++ power stayed at 21–23% from 5,000 to 20,000 prompts because 1,000 labels cap it. A latency cost was never stopped offline. Segments, traffic shares and the quality-to-online slope are all assumed known.
 - **Next question:** theme 2 of the review, a public-data check. On the Criteo uplift dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says?
+
+### Retro: Propensity vs uplift targeting on real randomized data
+
+- **Held up:** the first loop on public data, with a randomized baseline. It confirmed loop 4's two targeting warnings. Credited / incremental visits rose from 4.71x (everyone) to 8.58x (top 5% by propensity). The marginal return from 10% to 40% reach was 0.15 of the average for visits and 0.04 for conversions. CI now smoke-runs the pipeline on synthetic data with the real schema.
+- **Didn't:** loop 4's simulation assumed high-intent users respond slightly less to ads. On Criteo, absolute uplift rises steeply with propensity: the top 20% by propensity hold 72.2% of incremental visits. So the uplift model won only at tight reach on visits (45.7% vs 28.9% of incremental at 5%) and not on rare conversions (53.1% vs 59.1%). This is one advertiser with anonymized features and simple models, and the SEs exclude model-fitting noise.
+- **Next question:** theme 3, cheaper corrections. Loops 1, 4 and 5 all ended with correct but expensive answers. How far can sequential monitoring and variance reduction cut the cost?

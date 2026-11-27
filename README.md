@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [The targeting model already knows who would convert: propensity vs uplift on real randomized data](writing/propensity-vs-uplift-targeting-criteo.md)
 - [An offline eval win is evidence about the eval set: offline LLM evals vs online A/B](writing/offline-evals-vs-online-ab.md)
 - [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md)
 - [Opt-in AI features: when an observational impact estimate is usable](writing/opt-in-ai-adoption-observational-bias.md)
@@ -33,7 +34,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). Five loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, and offline evals vs online A/B. Next up is a public-data check of uplift vs propensity targeting.
+Next up: [contribution plan](contribution-plan.md). Six loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, and a public-data check of propensity vs uplift targeting. Next up is cheaper corrections: cutting the cost of valid answers with sequential monitoring and variance reduction.
 
 ## Side projects
 
