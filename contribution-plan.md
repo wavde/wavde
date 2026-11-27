@@ -55,6 +55,7 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 | LLM-as-judge noise in A/B tests | Done | [experiment-toolkit#1](https://github.com/wavde/experiment-toolkit/pull/1), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/llm_judge_results.md) | [LLM-as-judge is a noisy metric](writing/llm-judge-noise-in-ab-tests.md) |
 | Pretrained forecasters vs SARIMA | Done | [demand-forecasting#1](https://github.com/wavde/demand-forecasting/pull/1), [results](https://github.com/wavde/demand-forecasting/blob/main/docs/pretrained_results.md) | [Pretrained forecasters vs SARIMA](writing/pretrained-forecasters-vs-sarima.md) |
 | Opt-in AI adoption and observational bias | Done | [causal-inference-playbook#9](https://github.com/wavde/causal-inference-playbook/pull/9), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/07-ai-feature-adoption/results.md) | [Opt-in AI features](writing/opt-in-ai-adoption-observational-bias.md) |
+| Measurement in AI-mediated marketing | Done | [paid-media-playbook#1](https://github.com/wavde/paid-media-playbook/pull/1), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/06-ai-mediated-measurement/results.md) | [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -73,3 +74,9 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 - **Held up:** with known ground truth, the fake-launch placebo separated the cases it should. DiD was unbiased under a stable unobserved trait (bias -0.001, 94.8% coverage) while the placebo flagged AIPW with pre-periods in 100.0% of replications, and it flagged a pre-existing trend in 95.3%.
 - **Didn't:** the placebo is blind to adoption timed to a post-launch rise in need. With a true effect of zero, the placebo-gated DiD acted on a spurious effect in 97.2% of replications, and the E-value didn't help (median 1.83). The design also uses linear trends, two pre-periods, fixed selection strengths and one unobserved channel at a time.
 - **Next question:** theme 4, measurement in AI-mediated marketing. What can incrementality tests and MMM say when targeting and creative are model-driven?
+
+### Retro: Measurement in AI-mediated marketing
+
+- **Held up:** each tool was unbiased for the question it can answer. The ghost-ads holdout stayed within ±0.7% bias at every targeting sharpness, the two-cell budget split estimated marginal iROAS at 0.90 against a true 0.90 and never recommended an unprofitable scale-up, and the audience-fixed creative test declared no winner in 93% of replications when there was none.
+- **Didn't:** the mechanisms are switched on one at a time with chosen effect sizes, the ghost-ads holdouts are assumed clean, the two-cell result needs 2,000,000 users per test, and the MMM is a best-case OLS with known transforms. Using the lift test as a prior was weaker than expected: +48% ROI bias at a spend–demand correlation of 0.6.
+- **Next question:** all four themes are done, so the plan is due for its post-loop review before another loop starts.
