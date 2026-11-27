@@ -63,6 +63,6 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 
 ### Retro: Pretrained forecasters vs SARIMA
 
-- **Held up:** the comparison reused the existing rolling-origin backtest unchanged, reruns were byte-identical, and the answer was clear enough to act on: zero-shot Chronos-Bolt didn't beat the fixed-order SARIMA with full history (MASE 0.784 vs 0.741 on UK, 0.589 vs 0.584 on rest of world), but it did at 56 days of history on both series.
+- **Held up:** the comparison reused the existing rolling-origin backtest unchanged, reruns were byte-identical, and the answer was clear enough to act on: zero-shot Chronos-Bolt didn't beat SARIMA with full history, whether the order was fixed or re-selected by AIC per fold (UK MASE 0.784 vs 0.741 fixed and 0.748 tuned; rest of world 0.589 vs 0.584 for both), but it beat both at 56 days of history on both series. Per-fold tuning overfit on short UK history (1.048 at 56 days).
 - **Didn't:** two series and six folds can't separate differences of a few percent, the UK gap comes mostly from one Christmas fold, pretraining overlap with the public dataset isn't audited, and only point forecasts were scored. Building the evidence also showed that `run.py` failed from a clean install because CI doesn't run the pipeline; that was fixed in the same PR.
 - **Next question:** theme 2, causal questions about AI adoption. When are observational estimates of an AI feature's impact usable despite opt-in selection?
