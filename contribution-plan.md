@@ -54,6 +54,7 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 |---|---|---|---|
 | LLM-as-judge noise in A/B tests | Done | [experiment-toolkit#1](https://github.com/wavde/experiment-toolkit/pull/1), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/llm_judge_results.md) | [LLM-as-judge is a noisy metric](writing/llm-judge-noise-in-ab-tests.md) |
 | Pretrained forecasters vs SARIMA | Done | [demand-forecasting#1](https://github.com/wavde/demand-forecasting/pull/1), [results](https://github.com/wavde/demand-forecasting/blob/main/docs/pretrained_results.md) | [Pretrained forecasters vs SARIMA](writing/pretrained-forecasters-vs-sarima.md) |
+| Opt-in AI adoption and observational bias | Done | [causal-inference-playbook#9](https://github.com/wavde/causal-inference-playbook/pull/9), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/07-ai-feature-adoption/results.md) | [Opt-in AI features](writing/opt-in-ai-adoption-observational-bias.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -66,3 +67,9 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 - **Held up:** the comparison reused the existing rolling-origin backtest unchanged, reruns were byte-identical, and the answer was clear enough to act on: zero-shot Chronos-Bolt didn't beat SARIMA with full history, whether the order was fixed or re-selected by AIC per fold (UK MASE 0.784 vs 0.741 fixed and 0.748 tuned; rest of world 0.589 vs 0.584 for both), but it beat both at 56 days of history on both series. Per-fold tuning overfit on short UK history (1.048 at 56 days).
 - **Didn't:** two series and six folds can't separate differences of a few percent, the UK gap comes mostly from one Christmas fold, pretraining overlap with the public dataset isn't audited, and only point forecasts were scored. Building the evidence also showed that `run.py` failed from a clean install because CI doesn't run the pipeline; that was fixed in the same PR.
 - **Next question:** theme 2, causal questions about AI adoption. When are observational estimates of an AI feature's impact usable despite opt-in selection?
+
+### Retro: Opt-in AI adoption and observational bias
+
+- **Held up:** with known ground truth, the fake-launch placebo separated the cases it should. DiD was unbiased under a stable unobserved trait (bias -0.001, 94.8% coverage) while the placebo flagged AIPW with pre-periods in 100.0% of replications, and it flagged a pre-existing trend in 95.3%.
+- **Didn't:** the placebo is blind to adoption timed to a post-launch rise in need. With a true effect of zero, the placebo-gated DiD acted on a spurious effect in 97.2% of replications, and the E-value didn't help (median 1.83). The design also uses linear trends, two pre-periods, fixed selection strengths and one unobserved channel at a time.
+- **Next question:** theme 4, measurement in AI-mediated marketing. What can incrementality tests and MMM say when targeting and creative are model-driven?
