@@ -53,9 +53,16 @@ Next up, once the first loop is done: theme 3, a pretrained-forecaster compariso
 | Loop | Status | Evidence | Essay |
 |---|---|---|---|
 | LLM-as-judge noise in A/B tests | Done | [experiment-toolkit#1](https://github.com/wavde/experiment-toolkit/pull/1), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/llm_judge_results.md) | [LLM-as-judge is a noisy metric](writing/llm-judge-noise-in-ab-tests.md) |
+| Pretrained forecasters vs SARIMA | Done | [demand-forecasting#1](https://github.com/wavde/demand-forecasting/pull/1), [results](https://github.com/wavde/demand-forecasting/blob/main/docs/pretrained_results.md) | [Pretrained forecasters vs SARIMA](writing/pretrained-forecasters-vs-sarima.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
 - **Held up:** the closed-form bias, variance, Type-I, and power matched the simulation in every scenario, and PPI++ with labels drawn within each arm kept Type-I near 5% under differential judge error while the naive test's false-positive rate climbed toward 1 with sample size.
 - **Didn't:** the model is binary-only with a fixed judge (no drift), and at realistic label budgets the correction costs a lot of power (0.25 for PPI++ vs 0.59 for the naive metric at 5,000 units and 500 labels per arm), so the label budget is the binding constraint.
 - **Next question:** theme 3. Does a pretrained time-series forecaster beat a tuned SARIMA on the existing demand-forecasting rolling-origin backtest?
+
+### Retro: Pretrained forecasters vs SARIMA
+
+- **Held up:** the comparison reused the existing rolling-origin backtest unchanged, reruns were byte-identical, and the answer was clear enough to act on: zero-shot Chronos-Bolt didn't beat the fixed-order SARIMA with full history (MASE 0.784 vs 0.741 on UK, 0.589 vs 0.584 on rest of world), but it did at 56 days of history on both series.
+- **Didn't:** two series and six folds can't separate differences of a few percent, the UK gap comes mostly from one Christmas fold, pretraining overlap with the public dataset isn't audited, and only point forecasts were scored. Building the evidence also showed that `run.py` failed from a clean install because CI doesn't run the pipeline; that was fixed in the same PR.
+- **Next question:** theme 2, causal questions about AI adoption. When are observational estimates of an AI feature's impact usable despite opt-in selection?

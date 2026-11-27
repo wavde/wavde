@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](pretrained-forecasters-vs-sarima.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](llm-judge-noise-in-ab-tests.md)
 - [When boosting loses to SARIMA: baselines, MASE, and honest backtests](when-boosting-loses-to-sarima.md)
 - [Last-touch attribution systematically under-credits upper funnel](last-touch-under-credits-upper-funnel.md)
