@@ -96,6 +96,36 @@ All three round 3 themes shipped and met the finish criteria. No loop stalled.
 
 Priority 1 is done: the loop 6 essay's recommendation, decision rule and generalising sections now say which dataset supports each claim. Priority 2 is done: demand-forecasting's CI now smoke-runs `run.py` and `run_pretrained.py` on synthetic data with the UCI schema, using a seasonal-naive stub in place of Chronos-Bolt (no download, no torch) ([demand-forecasting#3](https://github.com/wavde/demand-forecasting/pull/3)). Every repo's evidence pipelines now run in CI. Priority 3 is done (loop 11): with labels drawn at random from the whole test, PPI++ stays valid under silent drift without detecting it, and score monitors are tripwires that can't tell drift from real change ([experiment-toolkit#8](https://github.com/wavde/experiment-toolkit/pull/8)). Round 4 is complete, and the plan is due for its fourth review before another loop starts.
 
+## Review after round 4
+
+Round 4 ran the third review's priorities in order: two fixes, then one loop. All three shipped and met the finish criteria. No item stalled.
+
+**What held up**
+
+- Ranking fixes above new coverage was right. The loop 6 essay no longer states a finding that failed replication, and every repo's evidence pipelines now smoke-run in CI, so a clean-install break anywhere is caught automatically.
+- Loop 11 reused loop 9's module and loop 1's PPI++ unchanged and closed the last open item on judge drift. Its main answer, that labels drawn at random from the whole test protect the readout without detecting drift, is the same rule loops 1 and 9 reached: randomize at the decision you're making.
+- Eleven loops have converged on a small set of rules. Almost every one says which number can carry which decision, and which can't.
+
+**What didn't**
+
+- The rules are spread across eleven essays, and nothing ties them together. A reader who wants the decision rule for measuring an AI feature has to read most of them. That cuts against the principle of fewer, defensible pieces more than another loop would help it.
+- The profile lists 21 essays in one flat, newest-first list. The AI-measurement work, which is the focus, is mixed in with older method notes.
+- The evidence is still mostly simulation. Only one loop's conclusions were tested on a second dataset, and one of them didn't replicate. No LLM-judge result has been checked against a real judge.
+- Loop 11 named a canary set of stored outputs re-judged daily as likely the cheapest specific drift monitor, but it isn't simulated.
+
+**Priorities for round 5**, ranked by what most improves the defensibility and readability of what's already published:
+
+1. **Consolidate: a synthesis essay, "which number supports which decision".** Combine the existing decision rules for measuring AI features into one map, linking each rule to its evidence. No new numbers; cite only merged evidence, and state the replication status of each claim, including loop 6's finding that didn't replicate. It ranks first because it's the entry point a reviewer reads first, and the grouped Writing section in priority 2 should lead with it.
+2. **Consolidate: group the README Writing section by theme,** with AI measurement first and the synthesis at its head, instead of one flat list.
+3. **New loop: a canary-set drift monitor.** Decision: does re-judging a fixed set of stored outputs every day detect silent judge drift faster and more specifically than the score and agreement monitors from loop 11? It ranks last because loop 11's rule already protects the readout without detection, so this improves diagnosis rather than validity.
+
+**Changes for the next round**
+
+- Before starting a new loop, check whether its decision rule can be added to the synthesis. A loop that can't change or sharpen a line of the map is a lower priority.
+- Consolidation counts as progress. A round can end without a new loop.
+
+Priority 1 is done: [Which number supports which decision](writing/which-number-supports-which-decision.md) maps eleven decisions to the number that supports each, with the evidence and its replication status. Next up: priority 2, grouping the Writing section by theme.
+
 ## Round 3 themes (done)
 
 1. **Staggered rollout vs fixed holdout for opt-in AI features.** Decision: for the same withheld traffic, should a team run a long, small holdout, a short staggered rollout, or both? What does each one estimate when the effect grows (learning) or fades (novelty)? Evidence: a simulation in causal-inference-playbook with known short-run and long-run effects. It closes the open theme-3 candidate and the gap left by loop 3.

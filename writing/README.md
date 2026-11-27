@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [Which number supports which decision: measuring AI features](which-number-supports-which-decision.md)
 - [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](silent-judge-drift.md)
 - [It didn't replicate: propensity vs uplift targeting on a second randomized dataset](uplift-targeting-replication-hillstrom.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](judge-drift-mid-test.md)

@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [Which number supports which decision: measuring AI features](writing/which-number-supports-which-decision.md)
 - [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](writing/silent-judge-drift.md)
 - [It didn't replicate: propensity vs uplift targeting on a second randomized dataset](writing/uplift-targeting-replication-hillstrom.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md)
@@ -39,7 +40,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). Eleven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, a replication of the targeting check on a second public dataset, and silent judge drift. Round 4 is complete: the propensity-vs-uplift essay is revised in light of the replication, demand-forecasting's pipelines smoke-run in CI, and silent judge drift is covered. Next up is the fourth plan review.
+Next up: [contribution plan](contribution-plan.md). Eleven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, a replication of the targeting check on a second public dataset, and silent judge drift. Round 4 is complete: the propensity-vs-uplift essay is revised in light of the replication, demand-forecasting's pipelines smoke-run in CI, and silent judge drift is covered. The fourth plan review chose consolidation over a new loop: [a synthesis of which number supports which decision](writing/which-number-supports-which-decision.md) is the first item. Next up is grouping this Writing section by theme.
 
 ## Side projects
 
