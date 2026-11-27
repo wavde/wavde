@@ -2,6 +2,7 @@
 
 Short technical posts on methods used in the case studies.
 
+- [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md)
 - [Opt-in AI features: when an observational impact estimate is usable](opt-in-ai-adoption-observational-bias.md)
 - [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](pretrained-forecasters-vs-sarima.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](llm-judge-noise-in-ab-tests.md)

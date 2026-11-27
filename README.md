@@ -17,6 +17,7 @@ The repositories below are the work I keep public: case studies on how I measure
 
 Short essays on methods that show up in the case studies:
 
+- [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md)
 - [Opt-in AI features: when an observational impact estimate is usable](writing/opt-in-ai-adoption-observational-bias.md)
 - [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](writing/pretrained-forecasters-vs-sarima.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](writing/llm-judge-noise-in-ab-tests.md)
@@ -31,7 +32,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). The first three loops, on LLM-as-judge metrics, pretrained forecasters, and opt-in AI adoption, are done. The remaining themes are proposed, not finished work.
+Next up: [contribution plan](contribution-plan.md). All four planned loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, and AI-mediated marketing measurement. The plan is due for review before the next loop.
 
 ## Side projects
 
