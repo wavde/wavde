@@ -58,7 +58,7 @@ Ranked by AI relevance and by how directly each one answers a gap above.
 2. **Public-data check of uplift vs propensity targeting.** Decision: on a real randomized ad dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says? Evidence: a replication in paid-media-playbook on the public Criteo uplift dataset, which comes from a randomized trial. This answers the synthetic-data gap.
 3. **Cheaper corrections.** Decision: how far can sequential monitoring and variance reduction cut the cost of a valid answer? Candidates are combining PPI++ with CUPED-style covariates for the label budget, and staggered-rollout power versus a fixed holdout for opt-in features. It builds on experiment-toolkit's mSPRT and CUPED modules.
 
-Next up: theme 1, offline evals vs online A/B.
+Next up: theme 2, the public-data check of uplift vs propensity targeting. Theme 1 is done (loop 5).
 
 ## Completed themes
 
@@ -86,6 +86,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | Pretrained forecasters vs SARIMA | Done | [demand-forecasting#1](https://github.com/wavde/demand-forecasting/pull/1), [results](https://github.com/wavde/demand-forecasting/blob/main/docs/pretrained_results.md) | [Pretrained forecasters vs SARIMA](writing/pretrained-forecasters-vs-sarima.md) |
 | Opt-in AI adoption and observational bias | Done | [causal-inference-playbook#9](https://github.com/wavde/causal-inference-playbook/pull/9), [results](https://github.com/wavde/causal-inference-playbook/blob/main/case-studies/07-ai-feature-adoption/results.md) | [Opt-in AI features](writing/opt-in-ai-adoption-observational-bias.md) |
 | Measurement in AI-mediated marketing | Done | [paid-media-playbook#1](https://github.com/wavde/paid-media-playbook/pull/1), [results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/06-ai-mediated-measurement/results.md) | [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md) |
+| Offline evals vs online A/B | Done | [experiment-toolkit#2](https://github.com/wavde/experiment-toolkit/pull/2), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/offline_online_results.md) | [An offline eval win is evidence about the eval set](writing/offline-evals-vs-online-ab.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -110,3 +111,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** each tool was unbiased for the question it can answer. The ghost-ads holdout stayed within ±0.7% bias at every targeting sharpness, the two-cell budget split estimated marginal iROAS at 0.90 against a true 0.90 and never recommended an unprofitable scale-up, and the audience-fixed creative test declared no winner in 93% of replications when there was none.
 - **Didn't:** the mechanisms are switched on one at a time with chosen effect sizes, the ghost-ads holdouts are assumed clean, the two-cell result needs 2,000,000 users per test, and the MMM is a best-case OLS with known transforms. Using the lift test as a prior was weaker than expected: +48% ROI bias at a spend–demand correlation of 0.6.
 - **Next question:** all four themes are done, so the plan is due for its post-loop review before another loop starts. That review is in "Review after loops 1–4" above.
+
+### Retro: Offline evals vs online A/B
+
+- **Held up:** each offline correction removed the failure it targets, and the simulated means matched their closed-form values. Under mix shift, the raw offline judge shipped a change that hurts live traffic in 100% of replications and the reweighted readouts in 0–1%. Under a lenient judge, PPI++ cut false ships from 53% (reweighted) to 3%. The new CI smoke step (from the plan review) ran both evidence scripts on the first PR.
+- **Didn't:** the corrections are expensive and still can't see online-only costs. On a real win, shipping fell from 87% (raw) to 49% (reweighted) to 25% (PPI++). PPI++ power stayed at 21–23% from 5,000 to 20,000 prompts because 1,000 labels cap it. A latency cost was never stopped offline. Segments, traffic shares and the quality-to-online slope are all assumed known.
+- **Next question:** theme 2 of the review, a public-data check. On the Criteo uplift dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says?
