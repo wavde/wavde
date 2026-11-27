@@ -2,11 +2,11 @@
 
 *~7 min read. Companion code is [case 07](https://github.com/wavde/paid-media-playbook/tree/main/case-studies/07-criteo-uplift) in paid-media-playbook, with [tests](https://github.com/wavde/paid-media-playbook/blob/main/tests/test_criteo_uplift.py) and the [generated results](https://github.com/wavde/paid-media-playbook/blob/main/case-studies/07-criteo-uplift/results.md). It checks the simulation in [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) against real data.*
 
-> **Update:** a replication on a second randomized dataset, a retailer's e-mail experiment, did not reproduce the concentration finding below. There, the top 20% of customers by propensity reached 25.9% of incremental visits, not 72.2%. Credit inflation and falling marginal returns did replicate, but they were weaker. See [It didn't replicate](uplift-targeting-replication-hillstrom.md). Treat the uplift-vs-propensity conclusion here as specific to this dataset.
+> **Revised after a replication.** A second randomized dataset, a retailer's e-mail experiment, did not reproduce this post's concentration finding: there, the top 20% of customers by propensity reached 25.9% of incremental visits, not 72.2%. Credit inflation and falling marginal returns did replicate, but more weakly. See [It didn't replicate](uplift-targeting-replication-hillstrom.md). The recommendation, the decision rule and the sections that generalised from Criteo have been revised; the Criteo numbers are unchanged.
 
 ## The recommendation
 
-Treat platform-credited results from a tightly targeted campaign as an upper bound, not as incrementality. Price any budget increase with a marginal test, never with the average lift at the current reach. And don't assume an uplift model beats the platform's propensity targeting: test that against a randomized holdout at the reach you actually buy.
+Treat platform-credited results as an upper bound, not as incrementality. Price any budget increase with a marginal test, never with the average lift at the current reach. And don't assume an uplift model beats the platform's propensity targeting: test that against a randomized holdout at the reach you actually buy.
 
 The reason comes from 6,988,166 held-out users in the public Criteo uplift dataset, where treatment was randomized:
 
@@ -61,9 +61,9 @@ The loop 4 simulation assumed a ratio of 0.81. Under random targeting the ratio 
 
 ## What the simulation got wrong
 
-The simulation assumed high-intent users respond slightly *less* to ads, in log-odds terms. On Criteo, absolute uplift rises steeply with propensity: the top 20% by visit propensity hold 72.2% of all incremental visits, and the top 20% by conversion propensity hold 86.2% of all incremental conversions. The "they'd have converted anyway" story is true for the *credited* number. It isn't true for the people the targeting model picks: they are also the ones most moved by the ad.
+The simulation assumed high-intent users respond slightly *less* to ads, in log-odds terms. On Criteo, absolute uplift rises steeply with propensity: the top 20% by visit propensity hold 72.2% of all incremental visits, and the top 20% by conversion propensity hold 86.2% of all incremental conversions. The "they'd have converted anyway" story is true for the *credited* number. On Criteo it isn't true for the people the targeting model picks: they are also the ones most moved by the ad. That pattern did not replicate on a retailer's e-mail experiment, where the top 20% by propensity held only 25.9% of incremental visits ([It didn't replicate](uplift-targeting-replication-hillstrom.md)). It is a property of this dataset, not of propensity targeting in general.
 
-That's why the uplift model's advantage is narrow:
+That's why the uplift model's advantage is narrow here:
 
 | Share of all incremental reached | 5% reach | 10% | 20% | 30% |
 |---|---:|---:|---:|---:|
@@ -86,19 +86,21 @@ For visits, the uplift model wins clearly at 5–10% reach and roughly ties from
 
 - **Uplift is concentrated in users the propensity model ranks low,** for example new customers whom the ad persuades but who rarely convert on their own. Then propensity targeting wastes most of the budget and an uplift model wins at every reach. This dataset doesn't show that pattern, but nothing guarantees a given advertiser won't.
 - **The campaign already runs at broad reach.** At 30% reach and above, the targeting rule barely matters for visits. The budget-level question (marginal return) matters more.
-- **Credit is defined differently.** View-through or modeled attribution can push credited numbers above or below these ratios. The direction (more inflation at tighter targeting) is the robust part.
+- **Credit is defined differently.** View-through or modeled attribution can push credited numbers above or below these ratios. On Criteo, inflation grew with tighter targeting. On the e-mail replication it barely moved (2.74 to 3.15 for the top 10%, within about one SE), so only "credited exceeds incremental" held on both datasets.
 
 ## What would change my mind
 
-- **The same check on other randomized advertising datasets, with uplift concentrated in low-propensity users.** That would change the recommendation from "test an uplift model first" to "replace propensity targeting".
+- **The same check on other randomized advertising datasets, with uplift concentrated in low-propensity users.** That would change the recommendation from "test an uplift model first" to "replace propensity targeting". The first replication found neither pattern: on the e-mail experiment, uplift was spread across the customer base and neither score concentrated it much.
 - **A stronger uplift learner that beats propensity for conversions** on this data, by more than the fold standard errors (about 2 to 2.5 points of share at 5–10% reach).
 - **Platform-side holdouts showing a marginal / average ratio near 1** at the reach changes a team actually makes. Then the average lift at current reach would be a usable budget guide.
 
 ## The decision rule
 
-1. **Platform-credited results are an upper bound,** and a looser one the more tightly the campaign is targeted (4.71x everyone, 8.58x for the top 5% by propensity, for visits).
-2. **Price budget changes with a marginal test,** such as case 06's two-cell budget split, at the reach levels you're choosing between. Under propensity targeting, the marginal return from 10% to 40% reach was 15% of the average for visits and 4% for conversions.
-3. **Treat an uplift model as a hypothesis, not an upgrade.** Before switching from propensity targeting, compare the two on a randomized holdout at the reach you buy. Here it paid at 5–10% reach on visits and not on conversions.
+Revised after the e-mail replication. Each point says which dataset supports it.
+
+1. **Platform-credited results are an upper bound.** This held on both datasets: 4.71x the incremental visits when everyone is targeted on Criteo, 2.74 on the e-mail experiment. Whether the bound loosens with tighter targeting is dataset-specific: on Criteo it rose to 8.58x for the top 5% by propensity, while on the e-mail experiment it barely moved.
+2. **Price budget changes with a marginal test,** such as case 06's two-cell budget split, at the reach levels you're choosing between. On both datasets the marginal return under propensity targeting was below the average, but by very different amounts: 15% of the average for visits on Criteo, 67% on the e-mail experiment. Measure it; don't assume either number.
+3. **Don't assume propensity targeting already finds the persuadable users.** On Criteo it did (the top 20% held 72.2% of incremental visits); on the e-mail experiment it didn't (25.9%). Compare propensity targeting, an uplift model and broad targeting on a randomized holdout at the reach you buy before choosing.
 
 ---
 

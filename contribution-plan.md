@@ -94,7 +94,7 @@ All three round 3 themes shipped and met the finish criteria. No loop stalled.
 2. **Fix: add a CI smoke run to demand-forecasting**, closing the last gap from the first review's process change.
 3. **New loop: judge drift without a version boundary.** Decision: how can a team detect and handle a judge that changes silently during a test? Builds on loop 9.
 
-Next up: priority 1.
+Priority 1 is done: the loop 6 essay's recommendation, decision rule and generalising sections now say which dataset supports each claim. Next up: priority 2.
 
 ## Round 3 themes (done)
 
