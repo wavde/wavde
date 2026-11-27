@@ -72,13 +72,37 @@ All three themes from the first review shipped and met the finish criteria. No l
 - Each loop names the previous loop's number it reproduces or revises, as loop 7 did.
 - Close the CI smoke gap in any repo a loop touches.
 
-## Round 3 themes (proposed)
+## Review after loops 8–10
+
+All three round 3 themes shipped and met the finish criteria. No loop stalled.
+
+**What held up**
+
+- Each loop checked a previous loop's assumption, as the second review asked. Loop 8 answered loop 3's open "holdout or staggered rollout" question. Loop 9 removed the fixed-judge assumption from loops 1 and 7. Loop 10 re-tested loop 6 on a second public dataset.
+- Replication did its job. Loop 10 showed that loop 6's headline (uplift concentrates in high-propensity users: 72.2% of incremental visits in the top 20% on Criteo) is dataset-specific. On Hillstrom the top 20% held 25.9%. A plan that only ran new loops would never have caught that.
+- CI smoke runs now cover the evidence in experiment-toolkit, causal-inference-playbook and paid-media-playbook.
+
+**What didn't**
+
+- Loop 6's published decision rule still states the non-replicating finding as a general pattern. Loop 10 added an update note, but the rule, the "what the simulation got wrong" section and the robustness claim in the essay body are unchanged. A published claim that failed replication is the largest defensibility gap in the portfolio.
+- demand-forecasting still has no CI smoke run, so loop 2's evidence can break from a clean install without anyone noticing.
+- Loop 9 covers a judge upgrade at a known time. Silent drift with no version boundary, such as a hosted model updated under the same name, is still open.
+
+**Priorities for round 4**, ranked by defensibility first and new coverage second:
+
+1. **Fix: revise loop 6's essay** so its decision rule, body and "what would change my mind" reflect loop 10. Small, and it removes a claim the evidence no longer supports.
+2. **Fix: add a CI smoke run to demand-forecasting**, closing the last gap from the first review's process change.
+3. **New loop: judge drift without a version boundary.** Decision: how can a team detect and handle a judge that changes silently during a test? Builds on loop 9.
+
+Next up: priority 1.
+
+## Round 3 themes (done)
 
 1. **Staggered rollout vs fixed holdout for opt-in AI features.** Decision: for the same withheld traffic, should a team run a long, small holdout, a short staggered rollout, or both? What does each one estimate when the effect grows (learning) or fades (novelty)? Evidence: a simulation in causal-inference-playbook with known short-run and long-run effects. It closes the open theme-3 candidate and the gap left by loop 3.
 2. **Judge drift during a test.** Decision: what happens to a judge-scored A/B test when the judge model is upgraded mid-test, and how should the analysis handle it? Builds on experiment-toolkit's `llm_judge`.
 3. **A second public randomized dataset.** Decision: does loop 6's finding (uplift concentrates in high-propensity users) hold for a different advertiser and channel? Candidate data: the Hillstrom email-marketing experiment.
 
-All three round 3 themes are done: theme 1 (loop 8), theme 2 (loop 9) and theme 3 (loop 10). The plan is due for its third review before another loop starts.
+All three are done: theme 1 (loop 8), theme 2 (loop 9) and theme 3 (loop 10). See "Review after loops 8–10" above.
 
 ## Round 2 themes (done)
 
