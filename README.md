@@ -35,7 +35,7 @@ Short essays on methods that show up in the case studies:
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). Seven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, and PPI++ with a pre-treatment covariate. The plan is due for its next review.
+Next up: [contribution plan](contribution-plan.md). Seven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, and PPI++ with a pre-treatment covariate. The second plan review is done; next up is staggered rollout vs fixed holdout for opt-in AI features.
 
 ## Side projects
 

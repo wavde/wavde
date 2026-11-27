@@ -50,17 +50,47 @@ All four themes shipped, and each one met the finish criteria. No loop stalled, 
 - At least one loop uses public, randomized data instead of a simulation.
 - Every evidence command gets a CI smoke run, a reduced-size run of the same pipeline, so a clean-install break is caught automatically.
 
-## Next themes (proposed)
+## Review after loops 5–7
 
-Ranked by AI relevance and by how directly each one answers a gap above.
+All three themes from the first review shipped and met the finish criteria. No loop stalled, so nothing is cut.
+
+**What held up**
+
+- Both process changes from the first review paid off. Loop 6 ran on public randomized data (Criteo) and corrected a loop-4 assumption: marginal returns fell far faster than the simulation had them (0.15 of average for visits, not 0.81). CI now smoke-runs the evidence scripts in experiment-toolkit and paid-media-playbook.
+- Closed forms kept scaling. Loop 7's label budgets reproduced loop 1's exactly, so each loop can now be checked against the previous one as well as against ground truth.
+- The decision rules kept converging on randomizing at the decision being made. Loop 5 reached it through online tests with guardrails, loop 6 through marginal budget tests, and loop 7 through human labels drawn within each arm.
+
+**What didn't**
+
+- The cost problem is only partly solved. Loop 7 cut the label budget by 5–32%, but a better judge saved more than any covariate, and the staggered-rollout question from theme 3 is still open.
+- Loop 3's recommendation, a holdout or staggered rollout instead of an opt-in comparison, has no evidence yet on which design to use or what each costs.
+- The LLM-judge loops all assume a fixed judge, and every retro flagged it.
+- CI smoke runs are still missing in causal-inference-playbook and demand-forecasting.
+
+**Changes for the next round**
+
+- Each loop names the previous loop's number it reproduces or revises, as loop 7 did.
+- Close the CI smoke gap in any repo a loop touches.
+
+## Round 3 themes (proposed)
+
+1. **Staggered rollout vs fixed holdout for opt-in AI features.** Decision: for the same withheld traffic, should a team run a long, small holdout, a short staggered rollout, or both? What does each one estimate when the effect grows (learning) or fades (novelty)? Evidence: a simulation in causal-inference-playbook with known short-run and long-run effects. It closes the open theme-3 candidate and the gap left by loop 3.
+2. **Judge drift during a test.** Decision: what happens to a judge-scored A/B test when the judge model is upgraded mid-test, and how should the analysis handle it? Builds on experiment-toolkit's `llm_judge`.
+3. **A second public randomized dataset.** Decision: does loop 6's finding (uplift concentrates in high-propensity users) hold for a different advertiser and channel? Candidate data: the Hillstrom email-marketing experiment.
+
+Next up: theme 1, staggered rollout vs fixed holdout.
+
+## Round 2 themes (done)
+
+Ranked by AI relevance and by how directly each one answers a gap in the first review.
 
 1. **Offline evals vs online A/B for LLM features.** Decision: when can an offline eval win be trusted to predict, or replace, an online test of an LLM feature? Evidence: a simulation in experiment-toolkit where the offline eval set differs from live traffic (prompt mix, judge bias, and the effect varies by segment). It measures how often the offline winner loses online, and whether reweighting the eval set to the traffic mix fixes it. This closes the open part of theme 1.
 2. **Public-data check of uplift vs propensity targeting.** Decision: on a real randomized ad dataset, does ranking users by conversion propensity rather than uplift waste spend the way loop 4's simulation says? Evidence: a replication in paid-media-playbook on the public Criteo uplift dataset, which comes from a randomized trial. This answers the synthetic-data gap.
 3. **Cheaper corrections.** Decision: how far can sequential monitoring and variance reduction cut the cost of a valid answer? Candidates are combining PPI++ with CUPED-style covariates for the label budget, and staggered-rollout power versus a fixed holdout for opt-in features. It builds on experiment-toolkit's mSPRT and CUPED modules.
 
-All three themes from this review are done: theme 1 (loop 5), theme 2 (loop 6) and theme 3 (loop 7, the PPI++ covariate candidate). The plan is due for its next review. The staggered-rollout candidate from theme 3 is still open.
+All three are done: theme 1 (loop 5), theme 2 (loop 6) and theme 3 (loop 7, the PPI++ covariate candidate). The staggered-rollout candidate moved to round 3.
 
-## Completed themes
+## Round 1 themes (done)
 
 The order reflects AI relevance and how much existing work each theme can reuse. All four are done; see the log below.
 
