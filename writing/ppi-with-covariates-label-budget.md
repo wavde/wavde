@@ -76,6 +76,8 @@ The same table shows where effort pays. At covariate R² 0.25:
 
 A better judge is the bigger lever, as long as it can be had.
 
+*Update after the [real-judge audit](real-judge-audit-mt-bench.md): on public MT-Bench data, GPT-4's verdicts correlated with expert verdicts at 0.14 to 0.56 (median 0.35). In [loop 1's table](llm-judge-noise-in-ab-tests.md) that is nearer the 0.70 judge (correlation 0.39) than the 0.85 judge (0.69) these headline budgets use, so the 2,397 and 982 figures are optimistic. With a judge that weak, the covariate matters more, not less: at R² 0.25 it saved 19% with a 0.70 judge against 14% with a 0.85 one. Rule 3 still holds, but it assumes a much better judge is available.*
+
 ## When it stops helping
 
 - **Labels are a large share of the arm.** At judge accuracy 0.85 and covariate R² 0.25, adding the covariate saves 15% at 100,000 judged units per arm and 14% at 20,000, but only 5% at 5,000. With 5,000 units, PPI++ already needs 3,561 labels, 71% of the arm, so there are few unlabeled units left to borrow strength from.

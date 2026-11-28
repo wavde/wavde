@@ -88,6 +88,8 @@ The label budget, not the judged traffic, is the binding constraint. Holding jud
 
 The saving sits a little below corr² (0.81 against 76%; 0.15 against 13%), which is the CUPED `1 - rho²` logic with a finite pool of judged units. A good judge makes labeling about four times cheaper. A mediocre one barely helps. At 0.85 accuracy, a +0.03 effect needs about 2,400 labels per arm, or about 12% of 20,000 judged units.
 
+*Update after the [real-judge audit](real-judge-audit-mt-bench.md): on public MT-Bench data, GPT-4's verdicts correlated with expert verdicts at 0.14 to 0.56 (median 0.35), not 0.69. That puts a real judge at or below the 0.70 row above (correlation 0.39, a 13% saving), so read the 0.85 and 0.95 rows as optimistic. The same goes for the `1/J²` inflation of the naive metric: a weaker judge needs more sample, not less. Size the budget from the correlation you measure on your own in-arm labels, as rule 1 says. The audit also confirmed the main finding on real data: GPT-4's errors depended on which model the experts preferred.*
+
 ## Assumptions and limitations
 
 All of this is synthetic, which is what makes the ground truth checkable. It is also where it can mislead.
