@@ -193,14 +193,14 @@ Round 6 ran one real-data loop, one consolidation item and one cut, as the fifth
 **Priorities for round 7**
 
 1. **Fix: put the real-data caveat where the optimistic numbers are.** Add a dated update to loops 1, 5 and 7 pointing to loop 13, using only published numbers. Loop 1's own table already has a row at correlation 0.39 (judge accuracy 0.70, a 13% saving) that real judges resemble.
-2. **Maintainer action, not a loop: release experiment-toolkit 0.3.0 to PyPI** so the package matches the essays. Publishing needs the maintainer's PyPI credentials, so it's listed here rather than done.
+2. **Maintainer action, not a loop: release experiment-toolkit 0.3.0 to PyPI** so the package matches the essays. Publishing needs the maintainer's PyPI credentials, so it's listed here rather than done. *(Correction: it didn't. The repo publishes to PyPI through trusted publishing whenever a GitHub release is published, so no PyPI credentials were needed.)*
 3. **No new loop this round.** The next loop should start only if it uses real data with a usable license, or responds to outside review of the published work.
 
 **Changes for the next round**
 
 - When a loop revises a number another essay relies on, the essay that quotes it gets an update note in the same PR, not just the synthesis.
 
-Priority 1 is done: loops 1, 5 and 7 now carry an update note pointing to the real-judge audit. **Round 7 status:** complete. Priority 1 done; priority 2 waits on the maintainer; priority 3 means no new loop. The seventh review is due when a new real-data source with a usable license appears, when outside feedback on the published work arrives, or after six weeks, whichever comes first.
+Priority 1 is done: loops 1, 5 and 7 now carry an update note pointing to the real-judge audit. Priority 2 is done: experiment-toolkit [0.3.0](https://github.com/wavde/experiment-toolkit/releases/tag/v0.3.0) is on [PyPI](https://pypi.org/project/experiment-toolkit/0.3.0/), with every module from loops 1 to 13, and its changelog now records the breaking changes from 0.2.0 ([experiment-toolkit#16](https://github.com/wavde/experiment-toolkit/pull/16)). **Round 7 status:** complete. Priorities 1 and 2 done; priority 3 means no new loop. The seventh review is due when a new real-data source with a usable license appears, when outside feedback on the published work arrives, or after six weeks, whichever comes first.
 
 ## Round 3 themes (done)
 
