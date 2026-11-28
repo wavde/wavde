@@ -92,6 +92,8 @@ The offline readouts are also weak at detecting harm. In the mix-shift scenario 
 - **Online-only costs measured separately and found negligible** for a class of changes, such as prompt edits with no change in length or latency.
 - **A label budget large enough to give PPI++ real power.** At 1,000 labels it ships a real win only 25% of the time. If labels were cheap enough to make that 80%, the offline gate becomes a useful filter rather than a formality.
 
+*Update after the [real-judge audit](real-judge-audit-mt-bench.md): these power numbers use a simulated judge with sensitivity = specificity = 0.85. On public MT-Bench data, GPT-4's verdicts correlated with expert verdicts at 0.14 to 0.56, against 0.69 for that judge in loop 1's setting, so with the same 1,000 labels a real judge would give PPI++ less power, not more. The audit also found the judge error this essay's lenient-judge scenario assumes: GPT-4's agreement with experts was 0.823 when they preferred the stronger model and 0.221 when they preferred the weaker one.*
+
 ## The decision rule
 
 1. **An offline eval win is a reason to run an online test, not a substitute for one.** The final ship decision belongs to an online A/B with guardrails on latency, cost and abandonment. Those costs don't exist offline.

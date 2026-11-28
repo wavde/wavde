@@ -170,6 +170,38 @@ Priority 1 is done (loop 13): on MT-Bench, GPT-4's errors depended on which mode
 
 A candidate for the sixth review, not started: re-run loop 13's audit with GPT-4o as judge on the same MT-Bench items using `reward-bench-results`, if its license is clarified. That would test whether a newer judge shows the same arm-dependent error, but not on current models.
 
+## Review after round 6
+
+Round 6 ran one real-data loop, one consolidation item and one cut, as the fifth review ranked them. No item stalled.
+
+**What held up**
+
+- The real-data check did its job. Loop 13 confirmed on public data the assumption all six judge loops simulate: GPT-4's errors depended on which model the experts preferred (agreement 0.823 against 0.221), and PPI++ with random human labels stayed valid on real verdicts.
+- Cutting priority 3 was right. No public dataset pairs real human verdicts with current-judge verdicts on current models under a usable license, and the plan records each one checked.
+
+**What didn't**
+
+- Loop 13 also showed that the simulated judges were too informative (correlation 0.69 assumed, 0.14 to 0.56 on MT-Bench), but only the synthesis said so. Loops 1, 5 and 7 still quoted label budgets and power for the simulated judge with no pointer to the real-data result. A reader landing on one of those essays would take the optimistic numbers at face value.
+- The profile calls experiment-toolkit a package "on PyPI", but PyPI has 0.2.0 and every module from loops 1 to 13 is on main only (0.3.0, unreleased). A reviewer who installs it from PyPI can't run any of the evidence.
+- New simulation loops now add less than they did. Nine of the thirteen loops are simulations of one mechanism at a time. The last two simulation loops confirmed loop 9's labeling rule (loop 11) and refined drift diagnosis (loop 12) rather than changing what a team does with the readout. The binding gaps are real data and how the existing work is read, not more coverage.
+
+**Candidates weighed and rejected**
+
+- **Re-running loop 13 with GPT-4o verdicts from `allenai/reward-bench-results`.** It has no license, so it fails the plan's own data rule, and its judged outputs come from 2023 models. Cut unless the license gap is resolved.
+- **Another simulation loop.** None clears the fourth review's gate of changing or sharpening a line of the synthesis.
+
+**Priorities for round 7**
+
+1. **Fix: put the real-data caveat where the optimistic numbers are.** Add a dated update to loops 1, 5 and 7 pointing to loop 13, using only published numbers. Loop 1's own table already has a row at correlation 0.39 (judge accuracy 0.70, a 13% saving) that real judges resemble.
+2. **Maintainer action, not a loop: release experiment-toolkit 0.3.0 to PyPI** so the package matches the essays. Publishing needs the maintainer's PyPI credentials, so it's listed here rather than done.
+3. **No new loop this round.** The next loop should start only if it uses real data with a usable license, or responds to outside review of the published work.
+
+**Changes for the next round**
+
+- When a loop revises a number another essay relies on, the essay that quotes it gets an update note in the same PR, not just the synthesis.
+
+Priority 1 is done: loops 1, 5 and 7 now carry an update note pointing to the real-judge audit. **Round 7 status:** complete. Priority 1 done; priority 2 waits on the maintainer; priority 3 means no new loop. The seventh review is due when a new real-data source with a usable license appears, when outside feedback on the published work arrives, or after six weeks, whichever comes first.
+
 ## Round 3 themes (done)
 
 1. **Staggered rollout vs fixed holdout for opt-in AI features.** Decision: for the same withheld traffic, should a team run a long, small holdout, a short staggered rollout, or both? What does each one estimate when the effect grows (learning) or fades (novelty)? Evidence: a simulation in causal-inference-playbook with known short-run and long-run effects. It closes the open theme-3 candidate and the gap left by loop 3.
