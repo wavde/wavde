@@ -1,12 +1,12 @@
 # Which number supports which decision: measuring AI features
 
-*~8 min read. A synthesis of the eleven loops in the [contribution plan](../contribution-plan.md). It adds no new evidence: every number below appears in the linked essay, and each essay links to the code that reproduces it with one command and a fixed seed.*
+*~8 min read. A synthesis of the twelve loops in the [contribution plan](../contribution-plan.md). It adds no new evidence: every number below appears in the linked essay, and each essay links to the code that reproduces it with one command and a fixed seed.*
 
 ## The recommendation
 
 When someone shows you a number about an AI feature, ask two questions before acting on it: **what was randomized, and who labeled the outcome?** A number supports a decision only if the randomization sits at the decision being made and the outcome is anchored to human judgment by a random sample. Otherwise it's a screen: useful for deciding what to test, not for deciding what to ship.
 
-Across eleven loops, the numbers teams are usually shown failed that test in the same ways:
+Across twelve loops, the numbers teams are usually shown failed that test in the same ways:
 
 - An LLM judge's score difference, when the treatment changes what the judge sees.
 - An offline eval win, read without reweighting to live traffic.
@@ -23,7 +23,7 @@ A team measuring an AI feature is rarely short of numbers. It's short of a way t
 
 ## What this draws on
 
-Eight of the eleven loops are simulations where the true effect is known by construction, so every estimate can be checked against the truth. Two use public randomized experiments: the Criteo uplift dataset and the Hillstrom e-mail experiment. One is a rolling-origin backtest on the public UCI Online Retail II data. A reduced-size run of every evidence pipeline runs in CI.
+Nine of the twelve loops are simulations where the true effect is known by construction, so every estimate can be checked against the truth. Two use public randomized experiments: the Criteo uplift dataset and the Hillstrom e-mail experiment. One is a rolling-origin backtest on the public UCI Online Retail II data. A reduced-size run of every evidence pipeline runs in CI.
 
 That makes the evidence good at one thing: showing that a method fails, or works, under a mechanism I chose. It's weaker at saying how often that mechanism occurs in practice. "Assumptions and limitations" below comes back to this.
 
@@ -33,7 +33,7 @@ That makes the evidence good at one thing: showing that a method fails, or works
 |---|---|---|---|---|
 | Ship on a judge-scored metric | Judge-score difference | Judge 5 points more lenient on treatment, no true effect: rejected 15% of the time at 1,000 units per arm, 49% at 5,000, 99% at 20,000 | PPI++ with human labels drawn at random within each arm: 3.6% to 5.8% | [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md) |
 | Keep reading a test after a judge upgrade | Judge scores pooled across versions; labels from before the upgrade | Pooled: rejected a true null 82.6% of the time. Pre-upgrade labels: Type-I rose from 0.064 to 0.392 as labels went from 250 to 4,000 | PPI++ with labels spread across the test or stratified by judge version | [Upgrading the judge mid-test](judge-drift-mid-test.md) |
-| Trust a test when the judge may change silently | Judge-only readout; launch-week labels | Treatment-only drift: Type-I 0.922 and 0.097 | PPI++ with labels drawn at random from the whole test: 0.048 to 0.053 under every drift tested | [When the judge drifts silently](silent-judge-drift.md) |
+| Trust a test when the judge may change silently | Judge-only readout; launch-week labels | Treatment-only drift: Type-I 0.922 and 0.097 | PPI++ with labels drawn at random from the whole test: 0.048 to 0.053 under every drift tested. To check whether the judge changed: a canary of stored outputs from every arm, re-judged daily (caught treatment-only drift 0.932 of the time; 0.021 when real quality fell) | [When the judge drifts silently](silent-judge-drift.md), [A canary set catches a drifting judge](canary-set-judge-drift.md) |
 | Ship from an offline eval | Raw offline eval win | Shipped a change that hurts live traffic in 100% of replications; never stopped a latency cost | Reweighted offline readouts (0–1%) to choose what to test; an online A/B with guardrails to ship (stopped the latency cost in 96%) | [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) |
 | Estimate the impact of an opt-in AI feature | Adopter vs non-adopter gap; DiD that passed its placebo | With adoption timed to a rise in need and a true effect of zero, placebo-gated DiD excluded zero in 97.2% of replications | A randomized holdout or randomized staggered rollout | [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) |
 | Launch on the long-run effect | Staggered rollout readout | Shipped a fading effect in 100.0% of replications | A fixed holdout for the whole window: 4.7% | [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) |
@@ -49,7 +49,7 @@ That makes the evidence good at one thing: showing that a method fails, or works
 
 **The valid number is expensive, so the budget is the real decision.** With a noisy judge, power at 5,000 units and 500 labels per arm was 0.59 for the naive judge metric and 0.25 for PPI++. On a real offline win, the share of replications that shipped fell from 87% (raw) to 49% (reweighted) to 25% (PPI++). The two-cell budget test used 2,000,000 users per test. A staggered rollout gives a more precise short-run read than a fixed holdout (SE 0.0175 vs 0.0285) and is still the wrong design for a fading effect. The cheapest lever was usually upstream: improving the judge from 85% to 95% accuracy cut the label budget from 2,397 to 982 labels per arm, more than any covariate did.
 
-**Some failures have no diagnostic, so the design has to carry them.** The fake-launch placebo can't see adoption timed to a rise in need (97.2% confidently wrong). Score monitors can't tell a drifting judge from a real quality drop: both fired in 0.993 and 1.000 of replications when quality fell and the judge didn't change. Offline evals can't see latency. In each case, no amount of analysis on the existing data fixes it; randomizing at the decision does.
+**Some failures have no diagnostic, so the design has to carry them.** The fake-launch placebo can't see adoption timed to a rise in need (97.2% confidently wrong). Offline evals can't see latency. In each case, no amount of analysis on the existing data fixes it; randomizing at the decision does. Judge drift was on this list until loop 12: score monitors on live traffic can't tell a drifting judge from a real quality drop (both fired in 0.993 and 1.000 of replications when quality fell and the judge didn't change), but a canary of stored outputs re-judged daily can, because its quality can't change (0.021 on the same drop). That's a diagnosis, not a fix: the canary says whether the judge changed, and the readout still needs labels drawn at random from the whole test.
 
 ## What replicated, and what didn't
 
@@ -78,7 +78,7 @@ Everything else in the map rests on simulation. The simulations show what a meth
 
 - **Real-judge audits showing that judge errors don't depend on which arm produced the output.** Most of the judge rules guard against arm-dependent error. If real judges rarely have it, the judge-only metric would be safe more often.
 - **A replication of any simulation result on real data that comes out the other way,** as loop 10 did for loop 6.
-- **A cheap diagnostic for a failure listed above as undiagnosable,** such as a canary set of stored outputs re-judged daily to separate judge drift from quality change. That would move a decision from "design it in" to "check it".
+- **A cheap diagnostic for a failure listed above as undiagnosable.** Loop 12 found one for judge drift in simulation: a canary of 400 stored outputs per arm, re-judged daily with no human labels, caught treatment-only drift 0.932 of the time and stayed at 0.021 when real quality fell. That moves *detecting* drift from "design it in" to "check it", but not the readout, which still needs random labels. It hasn't been run against a real hosted judge; a judge whose daily verdicts on fixed outputs are much noisier than its error rates imply would need a larger canary.
 
 ## The decision rule
 
@@ -90,4 +90,4 @@ Everything else in the map rests on simulation. The simulations show what a meth
 
 ---
 
-*Sources, newest first: [When the judge drifts silently](silent-judge-drift.md) · [It didn't replicate](uplift-targeting-replication-hillstrom.md) · [Upgrading the judge mid-test](judge-drift-mid-test.md) · [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) · [A covariate stacks on the judge](ppi-with-covariates-label-budget.md) · [The targeting model already knows who would convert](propensity-vs-uplift-targeting-criteo.md) · [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) · [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) · [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) · [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) · [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md). Code: [experiment-toolkit](https://github.com/wavde/experiment-toolkit), [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook), [paid-media-playbook](https://github.com/wavde/paid-media-playbook), [demand-forecasting](https://github.com/wavde/demand-forecasting).*
+*Sources, newest first: [A canary set catches a drifting judge](canary-set-judge-drift.md) · [When the judge drifts silently](silent-judge-drift.md) · [It didn't replicate](uplift-targeting-replication-hillstrom.md) · [Upgrading the judge mid-test](judge-drift-mid-test.md) · [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) · [A covariate stacks on the judge](ppi-with-covariates-label-budget.md) · [The targeting model already knows who would convert](propensity-vs-uplift-targeting-criteo.md) · [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) · [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) · [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) · [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) · [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md). Code: [experiment-toolkit](https://github.com/wavde/experiment-toolkit), [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook), [paid-media-playbook](https://github.com/wavde/paid-media-playbook), [demand-forecasting](https://github.com/wavde/demand-forecasting).*
