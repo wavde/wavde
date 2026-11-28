@@ -10,6 +10,7 @@ Short technical posts on methods used in the case studies, grouped by theme. Sta
 - [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](ppi-with-covariates-label-budget.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](judge-drift-mid-test.md)
 - [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](silent-judge-drift.md)
+- [A canary set catches a drifting judge without blaming real quality changes](canary-set-judge-drift.md)
 - [An offline eval win is evidence about the eval set: offline LLM evals vs online A/B](offline-evals-vs-online-ab.md)
 - [Opt-in AI features: when an observational impact estimate is usable](opt-in-ai-adoption-observational-bias.md)
 - [A staggered rollout can't see novelty: holdout vs rollout for opt-in AI features](staggered-rollout-vs-holdout.md)

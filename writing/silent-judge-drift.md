@@ -90,7 +90,7 @@ Running this continuously means labeling thousands of units per arm, far more th
 - **One monitor design:** a 7-day window against the launch week with a Bonferroni threshold. A CUSUM or a scan over change points would detect faster at the same false-alarm rate. The qualitative findings, that control-only monitoring misses arm-specific drift and that score monitors can't separate drift from quality change, don't depend on the test statistic.
 - **Drift inside the launch week** is invisible to these monitors, because the launch week is the reference.
 - **Human labels as ground truth.** If the labelers drift too (new guidelines, a new vendor), labels drawn across the test inherit that drift.
-- **Not tested:** re-judging a fixed canary set of stored outputs every day. Any change in its scores would be pure judge drift, with no labels and no confusion with quality change. It's likely the cheapest good monitor, but it isn't simulated here.
+- **Not tested:** re-judging a fixed canary set of stored outputs every day. Any change in its scores would be pure judge drift, with no labels and no confusion with quality change. It's likely the cheapest good monitor, but it isn't simulated here. *Update: tested in [A canary set catches a drifting judge](canary-set-judge-drift.md); with outputs from every arm it was as fast as the both-arm score monitor and didn't fire on a real quality drop.*
 
 ## When the conclusion breaks
 
