@@ -126,6 +126,37 @@ Round 4 ran the third review's priorities in order: two fixes, then one loop. Al
 
 Priority 1 is done: [Which number supports which decision](writing/which-number-supports-which-decision.md) maps eleven decisions to the number that supports each, with the evidence and its replication status. Priority 2 is done: the Writing section in the profile README and `writing/README.md` is grouped by theme (measuring AI features, marketing measurement and targeting, experimentation and causal inference, forecasting), with the synthesis first. Priority 3 is done (loop 12): a canary of stored outputs from every arm, re-judged daily, caught silent judge drift as fast as the both-arm score monitor without firing on a real quality drop, and the synthesis's judge-drift row and diagnostic lines are updated ([experiment-toolkit#11](https://github.com/wavde/experiment-toolkit/pull/11)). Round 5 is complete, and the plan is due for its fifth review before another loop starts.
 
+## Review after round 5
+
+Round 5 ran two consolidation items and then one loop, as the fourth review ranked them. All three shipped and met the finish criteria. Off-plan, an essay re-reading five classic case studies added a bandit-evaluation simulation in experiment-toolkit. No item stalled.
+
+**What held up**
+
+- Consolidation was worth a round. The synthesis is now the entry point to the writing, and the grouped Writing section puts the AI-measurement work first.
+- The fourth review's gate worked. Loop 12 changed a line of the synthesis, moving judge drift from "no diagnostic" to "checkable with a canary set", rather than adding an essay beside it.
+- Reproducibility held under an independent check. A rerun of the bandit-evaluation simulation reproduced its committed results byte for byte.
+
+**What didn't**
+
+- Every LLM-judge loop (1, 5, 7, 9, 11 and 12) rests on a simulated judge. The assumption they share, that a judge's errors can depend on which arm produced the output, and the judge accuracy they assume have never been checked on real data. The synthesis leans on both. This is now the largest defensibility gap in the portfolio.
+- The bandit-evaluation simulation takes about 33 minutes on a laptop CPU, and its results header didn't say so. A reproducibility claim should state its cost.
+- The off-plan essay's log row cited a PR that was still open, and had to be corrected after it merged.
+
+**Priorities for round 6**, ranked by defensibility first:
+
+1. **New loop, on real data: audit an LLM judge against human judgments.** Decision: do a real judge's errors depend on which model produced the output, and does PPI++ with human labels still hold up on real verdicts? Evidence: the public MT-Bench human judgments (Zheng et al., 2023, CC BY 4.0), where expert humans and GPT-4 judged the same pairwise comparisons, downloaded at runtime from a pinned revision. No model API calls or credentials. It passes the gate: it changes the synthesis's judge rows and its replication section.
+2. **Consolidate: add the bandit result to the synthesis** as a line for picking and quoting a creative a bandit chose, now that its evidence is merged ([experiment-toolkit#10](https://github.com/wavde/experiment-toolkit/pull/10)).
+3. **Candidate loop: a second real-judge audit with a current judge and current models,** only if a public dataset of paired human and LLM-judge verdicts with a usable license exists. Not yet checked; if none exists, cut it.
+
+**Fix done in this review:** the bandit-evaluation runtime is now stated in its README section and results header, with the results unchanged ([experiment-toolkit#13](https://github.com/wavde/experiment-toolkit/pull/13)).
+
+**Changes for the next round**
+
+- Every evidence script states its full runtime next to its command.
+- A log row cites only merged PRs.
+
+Priority 1 is done (loop 13): on MT-Bench, GPT-4's errors depended on which model the experts preferred (agreement 0.823 against 0.221), PPI++ stayed valid on the real verdicts, and the real judge was much less informative than the simulated ones, so PPI++ saved 2–28% of labels rather than 43% ([experiment-toolkit#14](https://github.com/wavde/experiment-toolkit/pull/14)). The synthesis's judge row, label-budget pattern, replication section and limitations are updated. **Round 6 status:** priority 1 done; priorities 2 and 3 open. Next up: priority 2. The sixth review is due when priorities 2 and 3 are done or cut, before any further loop.
+
 ## Round 3 themes (done)
 
 1. **Staggered rollout vs fixed holdout for opt-in AI features.** Decision: for the same withheld traffic, should a team run a long, small holdout, a short staggered rollout, or both? What does each one estimate when the effect grows (learning) or fades (novelty)? Evidence: a simulation in causal-inference-playbook with known short-run and long-run effects. It closes the open theme-3 candidate and the gap left by loop 3.
@@ -179,6 +210,7 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 | Judge drift without a version boundary | Done | [experiment-toolkit#8](https://github.com/wavde/experiment-toolkit/pull/8), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/silent_drift_results.md) | [When the judge drifts silently](writing/silent-judge-drift.md) |
 | Five classic case studies, re-read (off-plan) | Done | [experiment-toolkit#10](https://github.com/wavde/experiment-toolkit/pull/10), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/bandit_eval_results.md) | [Five classic data science case studies, re-read in 2026](writing/classic-case-studies-reread-2026.md) |
 | Canary-set drift monitor | Done | [experiment-toolkit#11](https://github.com/wavde/experiment-toolkit/pull/11), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/canary_drift_results.md) | [A canary set catches a drifting judge](writing/canary-set-judge-drift.md) |
+| Real-data judge audit (MT-Bench) | Done | [experiment-toolkit#14](https://github.com/wavde/experiment-toolkit/pull/14), [results](https://github.com/wavde/experiment-toolkit/blob/main/docs/judge_audit_results.md) | [A real LLM judge favours the winner](writing/real-judge-audit-mt-bench.md) |
 
 ### Retro: LLM-as-judge noise in A/B tests
 
@@ -257,3 +289,9 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 - **Held up:** it passed the fourth review's gate by sharpening a synthesis line, and reused loop 11's scenarios and monitors unchanged, so the comparison is like for like. A canary of 400 stored outputs per arm, with no human labels and fully independent re-judging, caught treatment-only drift 0.932 of the time against 0.838 for the both-arm score monitor, and stayed at 0.021 when true quality fell, where the score monitor fired 1.000. The closed-form canary size (420 per arm for 80% on one drifted week) matched the simulated detection rates.
 - **Didn't:** it wasn't faster. The median delay was 6 days for a step and 12 for gradual drift, the same as the score monitor, because the 7-day window sets the delay. A canary of control outputs only, the easy way to build one, missed treatment-only drift (0.020). The specificity holds by construction in the simulation; it hasn't been checked against a real hosted judge, whose day-to-day verdict noise is an assumption (repeatability 0 to 0.9).
 - **Next question:** round 5 is complete, and the plan is due for its fifth review before another loop starts. Candidates: checking any LLM-judge result against a real judge, since every judge loop so far is simulated, and whether the portfolio needs another loop at all.
+
+### Retro: Real-data judge audit (MT-Bench)
+
+- **Held up:** the first real-data check of the LLM-judge loops, with no API calls: public paired verdicts, downloaded at runtime and checksummed. The shared assumption replicated. GPT-4's win rate for the stronger model was above the experts' in 15 of 15 pairs (CI excludes zero in 9), and its agreement with experts was 0.823 when they preferred the stronger model against 0.221 when they preferred the weaker one. PPI++ with random human labels kept 0.930 to 0.956 coverage on the real verdicts, and the closed-form variance ratio matched the simulation.
+- **Didn't:** the simulated judges were too good. The real judge correlated with expert verdicts at 0.14 to 0.56 against 0.69 assumed, so PPI++ saved 2–28% of labels where loop 1's judge implies 43%, and every simulated label budget is optimistic. The data are 2023 models judged by a 2023 GPT-4, pairwise rather than per-output, and the resampling check treats the judged items as the population.
+- **Next question:** round 6 priority 2: add the bandit result to the synthesis. The sixth review is due once round 6's priorities 2 and 3 are done or cut.

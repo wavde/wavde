@@ -7,6 +7,7 @@ Short technical posts on methods used in the case studies, grouped by theme. Sta
 - [Which number supports which decision: measuring AI features](which-number-supports-which-decision.md)
 - [Five classic data science case studies, re-read in 2026](classic-case-studies-reread-2026.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](llm-judge-noise-in-ab-tests.md)
+- [A real LLM judge favours the winner: auditing GPT-4 against expert humans](real-judge-audit-mt-bench.md)
 - [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](ppi-with-covariates-label-budget.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](judge-drift-mid-test.md)
 - [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](silent-judge-drift.md)
