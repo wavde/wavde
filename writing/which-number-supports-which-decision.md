@@ -1,6 +1,6 @@
 # Which number supports which decision: measuring AI features
 
-*~8 min read. A synthesis of the thirteen loops in the [contribution plan](../contribution-plan.md). It adds no new evidence: every number below appears in the linked essay, and each essay links to the code that reproduces it with one command and a fixed seed.*
+*~8 min read. A synthesis of the thirteen loops in the [contribution plan](../contribution-plan.md), plus one off-plan simulation of a bandit picking among generated creatives. It adds no new evidence: every number below appears in the linked essay, and each essay links to the code that reproduces it with one command and a fixed seed.*
 
 ## The recommendation
 
@@ -13,6 +13,7 @@ Across thirteen loops, the numbers teams are usually shown failed that test in t
 - The gap between users who opted in to an AI feature and those who didn't.
 - The first weeks of a staggered rollout, for a feature whose effect fades.
 - Platform-credited conversions, and the average lift at the current budget.
+- The leader's lift after a bandit picked it from many generated variants.
 - A model card, instead of a backtest on your own series.
 
 Each one was wrong in at least one check where the answer was known by construction or came from a randomized experiment, and several got *more* confident as data grew.
@@ -23,7 +24,7 @@ A team measuring an AI feature is rarely short of numbers. It's short of a way t
 
 ## What this draws on
 
-Nine of the thirteen loops are simulations where the true effect is known by construction, so every estimate can be checked against the truth. Two use public randomized experiments: the Criteo uplift dataset and the Hillstrom e-mail experiment. One is a rolling-origin backtest on the public UCI Online Retail II data. One audits a real LLM judge, GPT-4, against expert human verdicts on the same comparisons (MT-Bench). A reduced-size run of every evidence pipeline runs in CI.
+Nine of the thirteen loops are simulations where the true effect is known by construction, so every estimate can be checked against the truth. Two use public randomized experiments: the Criteo uplift dataset and the Hillstrom e-mail experiment. One is a rolling-origin backtest on the public UCI Online Retail II data. One audits a real LLM judge, GPT-4, against expert human verdicts on the same comparisons (MT-Bench). One more simulation, built for an off-plan essay re-reading five classic case studies, covers a Thompson-sampling bandit choosing among generated creatives. A reduced-size run of every evidence pipeline runs in CI.
 
 That makes the evidence good at one thing: showing that a method fails, or works, under a mechanism I chose. It's weaker at saying how often that mechanism occurs in practice. "Assumptions and limitations" below comes back to this.
 
@@ -39,6 +40,7 @@ That makes the evidence good at one thing: showing that a method fails, or works
 | Launch on the long-run effect | Staggered rollout readout | Shipped a fading effect in 100.0% of replications | A fixed holdout for the whole window: 4.7% | [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) |
 | Change the budget of an algorithm-run campaign | Platform-credited ROAS; a lift test at the current budget | In simulation, with scaling up truly unprofitable, credited ROAS said scale up 100% of the time and a lift test at current budget 94%. On real data, credited visits were 4.71x incremental on Criteo and 2.74x on the e-mail experiment when targeting everyone | A two-cell budget split: estimated the marginal return at 0.90 against a true 0.90 and never recommended scaling. On real data the marginal return was 0.15 (Criteo) and 0.67 (e-mail) of the average, so measure it | [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md), [It didn't replicate](uplift-targeting-replication-hillstrom.md) |
 | Pick a creative when the platform picks the audience | In-platform A/B on served conversion rate | With neither creative better, picked creative A in 100% of replications | Fix the audience, then randomize creative: no winner in 93% when there was none | [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) |
+| Quote the lift of a creative a bandit picked | The leader's raw lift against control | With 20 generated variants all equal to the control and the click rate drifting ±20%, it claimed a false win in 100.0% of replications (bias +12.6%). Doubly robust off-policy estimation on the same log fixed the drift but not the winner's curse: without drift its bias was +4.6%, worse than the raw comparison's +3.5% | A confirmation A/B of the leader against control (false wins 3.6% without drift, 1.6% with), or an evaluation slice the bandit never learns from (bias within ±0.7% at every variant count, but SE 6.4% against 2.8%) | [Five classic case studies, re-read](classic-case-studies-reread-2026.md) |
 | Read an MMM with algorithm-paced spend | MMM with a lift test as a prior | ROI still overstated by 48% at a spend–demand correlation of 0.6 | The lift test result, replacing the MMM coefficient | [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) |
 | Replace a forecaster with a pretrained model | Model card | With full history, Chronos-Bolt lost to SARIMA (UK MASE 0.784 vs 0.741) | A rolling-origin backtest on your own series; zero-shot won at 56 days of history | [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) |
 | Choose between propensity and uplift targeting | "Propensity targeting already finds the persuadable users" | True on Criteo (top 20% held 72.2% of incremental visits), false on the e-mail experiment (25.9%) | A comparison on your own randomized holdout at the reach you buy | [It didn't replicate](uplift-targeting-replication-hillstrom.md), [revised Criteo essay](propensity-vs-uplift-targeting-criteo.md) |
@@ -65,7 +67,7 @@ The LLM-judge loops' shared assumption was audited on real verdicts (MT-Bench, G
 - **Replicated:** judge error depends on the arm. When experts preferred the stronger model, GPT-4 agreed 0.823 of the time; when they preferred the weaker one, 0.221. PPI++ with randomly drawn human labels stayed valid on the real verdicts (coverage 0.930 to 0.956), and the judge alone didn't (at most 0.005 in 13 of 15 pairs).
 - **Didn't:** how informative the judge is. The real correlation with expert verdicts (0.14 to 0.56) was far below the simulated judges', so every label budget derived from simulation overstates what PPI++ saves.
 
-The rest of the map, including judge drift, offline evals, opt-in adoption and rollout design, rests on simulation. The simulations show what a method does under a stated mechanism, with the answer known, but they haven't been replicated on real data.
+The rest of the map, including judge drift, offline evals, opt-in adoption, rollout design and the bandit's pick, rests on simulation. The simulations show what a method does under a stated mechanism, with the answer known, but they haven't been replicated on real data.
 
 ## Assumptions and limitations
 
@@ -89,7 +91,7 @@ The rest of the map, including judge drift, offline evals, opt-in adoption and r
 
 ## The decision rule
 
-1. **Ask what was randomized.** A number supports a decision only if randomization happened at that decision: users for a feature's impact, a fixed holdout for a long-run effect, budget levels for a budget change, creative within a fixed audience for a creative choice. Otherwise treat it as a screen.
+1. **Ask what was randomized.** A number supports a decision only if randomization happened at that decision: users for a feature's impact, a fixed holdout for a long-run effect, budget levels for a budget change, creative within a fixed audience for a creative choice, and traffic the bandit never learned from for a bandit's winner. Otherwise treat it as a screen.
 2. **Ask who labeled the outcome.** A judge-only metric supports a ship decision only if the treatment can't change what the judge sees. Otherwise anchor it with human labels drawn at random within each arm and across the whole test, and analyse with PPI++.
 3. **Ask whether more data would make it more confident even if it were wrong.** If yes, a bigger test won't help; change the design.
 4. **Ask whether it has been replicated where you'll use it.** Carry a conclusion to a new channel, advertiser or product only after testing it on your own randomized holdout.
@@ -97,4 +99,4 @@ The rest of the map, including judge drift, offline evals, opt-in adoption and r
 
 ---
 
-*Sources, newest first: [A real LLM judge favours the winner](real-judge-audit-mt-bench.md) · [A canary set catches a drifting judge](canary-set-judge-drift.md) · [When the judge drifts silently](silent-judge-drift.md) · [It didn't replicate](uplift-targeting-replication-hillstrom.md) · [Upgrading the judge mid-test](judge-drift-mid-test.md) · [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) · [A covariate stacks on the judge](ppi-with-covariates-label-budget.md) · [The targeting model already knows who would convert](propensity-vs-uplift-targeting-criteo.md) · [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) · [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) · [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) · [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) · [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md). Code: [experiment-toolkit](https://github.com/wavde/experiment-toolkit), [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook), [paid-media-playbook](https://github.com/wavde/paid-media-playbook), [demand-forecasting](https://github.com/wavde/demand-forecasting).*
+*Sources, newest first: [A real LLM judge favours the winner](real-judge-audit-mt-bench.md) · [Five classic case studies, re-read](classic-case-studies-reread-2026.md) · [A canary set catches a drifting judge](canary-set-judge-drift.md) · [When the judge drifts silently](silent-judge-drift.md) · [It didn't replicate](uplift-targeting-replication-hillstrom.md) · [Upgrading the judge mid-test](judge-drift-mid-test.md) · [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) · [A covariate stacks on the judge](ppi-with-covariates-label-budget.md) · [The targeting model already knows who would convert](propensity-vs-uplift-targeting-criteo.md) · [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) · [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) · [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) · [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) · [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md). Code: [experiment-toolkit](https://github.com/wavde/experiment-toolkit), [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook), [paid-media-playbook](https://github.com/wavde/paid-media-playbook), [demand-forecasting](https://github.com/wavde/demand-forecasting).*
