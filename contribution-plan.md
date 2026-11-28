@@ -161,7 +161,7 @@ Priority 1 is done (loop 13): on MT-Bench, GPT-4's errors depended on which mode
 
 - `lmarena-ai/arena-human-preference-140k` (CC BY 4.0, 2025) and `arena-human-preference-100k` (CC BY 4.0): real human votes on current models, but no LLM-judge verdicts. Adding them would need API calls.
 - `lmarena-ai/PPE-Human-Preference-V1` (2024): human Chatbot Arena votes on current models, but no per-item judge verdicts are published; the PPE code runs judges through APIs. No dataset-level license: prompts are CC BY 4.0 and model outputs fall under each provider's terms.
-- `lmsys/arena-human-preference-55k`: gated (needs credentials), and human votes only.
+- `lmsys/arena-human-preference-55k`: gated (needs credentials), but an ungated Apache 2.0 copy is at `lmarena-ai/arena-human-preference-55k`. Either way, human votes only.
 - `nvidia/HelpSteer2` and `nvidia/HelpSteer3` (CC BY 4.0, HelpSteer3 2025): real human annotations, but no LLM-judge verdicts.
 - `ScalerLab/JudgeBench` (MIT, 2024, GPT-4o and Claude-3.5 responses): labels are objective correctness, not human judgments, and no judge verdicts are included.
 - `allenai/reward-bench` and `reward-bench-2` (ODC-BY): chosen/rejected labels are a mix of human-verified, correctness-based and LLM-judged (the MT-Bench GPT-4 subsets), and they contain no judge verdicts.
