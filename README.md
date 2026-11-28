@@ -20,6 +20,7 @@ Short essays on methods that show up in the case studies, grouped by theme. Star
 ### Measuring AI features
 
 - [Which number supports which decision: measuring AI features](writing/which-number-supports-which-decision.md)
+- [Five classic data science case studies, re-read in 2026](writing/classic-case-studies-reread-2026.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](writing/llm-judge-noise-in-ab-tests.md)
 - [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](writing/ppi-with-covariates-label-budget.md)
 - [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md)
@@ -51,7 +52,7 @@ Short essays on methods that show up in the case studies, grouped by theme. Star
 - [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](writing/pretrained-forecasters-vs-sarima.md)
 - [When boosting loses to SARIMA: baselines, MASE, and honest backtests](writing/when-boosting-loses-to-sarima.md)
 
-Next up: [contribution plan](contribution-plan.md). Eleven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, a replication of the targeting check on a second public dataset, and silent judge drift. Round 4 is complete: the propensity-vs-uplift essay is revised in light of the replication, demand-forecasting's pipelines smoke-run in CI, and silent judge drift is covered. The fourth plan review chose consolidation over a new loop: [a synthesis of which number supports which decision](writing/which-number-supports-which-decision.md) is the first item. The Writing section is now grouped by theme. The plan's remaining round 5 item, a canary-set drift monitor, is proposed and not started.
+Next up: [contribution plan](contribution-plan.md). Eleven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, a replication of the targeting check on a second public dataset, and silent judge drift. Round 4 is complete: the propensity-vs-uplift essay is revised in light of the replication, demand-forecasting's pipelines smoke-run in CI, and silent judge drift is covered. The fourth plan review chose consolidation over a new loop: [a synthesis of which number supports which decision](writing/which-number-supports-which-decision.md) is the first item. The Writing section is now grouped by theme. Off-plan, a re-read of five classic case studies added a simulation of how to measure a creative a bandit picked from generated variants. The plan's remaining round 5 item, a canary-set drift monitor, is proposed and not started.
 
 ## Side projects
 
