@@ -124,7 +124,7 @@ Round 4 ran the third review's priorities in order: two fixes, then one loop. Al
 - Before starting a new loop, check whether its decision rule can be added to the synthesis. A loop that can't change or sharpen a line of the map is a lower priority.
 - Consolidation counts as progress. A round can end without a new loop.
 
-Priority 1 is done: [Which number supports which decision](writing/which-number-supports-which-decision.md) maps eleven decisions to the number that supports each, with the evidence and its replication status. Next up: priority 2, grouping the Writing section by theme.
+Priority 1 is done: [Which number supports which decision](writing/which-number-supports-which-decision.md) maps eleven decisions to the number that supports each, with the evidence and its replication status. Priority 2 is done: the Writing section in the profile README and `writing/README.md` is grouped by theme (measuring AI features, marketing measurement and targeting, experimentation and causal inference, forecasting), with the synthesis first. Next up: priority 3, the canary-set drift monitor, only if it can change or sharpen a line of the synthesis.
 
 ## Round 3 themes (done)
 

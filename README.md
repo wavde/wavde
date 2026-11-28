@@ -15,32 +15,43 @@ The repositories below are the work I keep public: case studies on how I measure
 
 ## Writing
 
-Short essays on methods that show up in the case studies:
+Short essays on methods that show up in the case studies, grouped by theme. Start with [Which number supports which decision](writing/which-number-supports-which-decision.md), which maps the AI-measurement rules to their evidence.
+
+### Measuring AI features
 
 - [Which number supports which decision: measuring AI features](writing/which-number-supports-which-decision.md)
-- [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](writing/silent-judge-drift.md)
-- [It didn't replicate: propensity vs uplift targeting on a second randomized dataset](writing/uplift-targeting-replication-hillstrom.md)
-- [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md)
-- [A staggered rollout can't see novelty: holdout vs rollout for opt-in AI features](writing/staggered-rollout-vs-holdout.md)
-- [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](writing/ppi-with-covariates-label-budget.md)
-- [The targeting model already knows who would convert: propensity vs uplift on real randomized data](writing/propensity-vs-uplift-targeting-criteo.md)
-- [An offline eval win is evidence about the eval set: offline LLM evals vs online A/B](writing/offline-evals-vs-online-ab.md)
-- [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md)
-- [Opt-in AI features: when an observational impact estimate is usable](writing/opt-in-ai-adoption-observational-bias.md)
-- [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](writing/pretrained-forecasters-vs-sarima.md)
 - [LLM-as-judge is a noisy metric: what it does to A/B power and bias](writing/llm-judge-noise-in-ab-tests.md)
-- [When boosting loses to SARIMA: baselines, MASE, and honest backtests](writing/when-boosting-loses-to-sarima.md)
-- [Last-touch attribution systematically under-credits upper funnel](writing/last-touch-under-credits-upper-funnel.md)
-- [Geo holdouts as paid-media A/B](writing/geo-holdouts-as-paid-media-ab.md)
+- [A covariate stacks on the judge, but a better judge beats both: cutting the label budget of PPI++](writing/ppi-with-covariates-label-budget.md)
+- [Upgrading the judge mid-test is safe only if your labels know about it](writing/judge-drift-mid-test.md)
+- [When the judge drifts silently, random labels protect the readout and monitors only tell you where to look](writing/silent-judge-drift.md)
+- [An offline eval win is evidence about the eval set: offline LLM evals vs online A/B](writing/offline-evals-vs-online-ab.md)
+- [Opt-in AI features: when an observational impact estimate is usable](writing/opt-in-ai-adoption-observational-bias.md)
+- [A staggered rollout can't see novelty: holdout vs rollout for opt-in AI features](writing/staggered-rollout-vs-holdout.md)
+
+### Marketing measurement and targeting
+
+- [Measuring marketing when the algorithm runs the campaign](writing/ai-mediated-marketing-measurement.md)
+- [The targeting model already knows who would convert: propensity vs uplift on real randomized data](writing/propensity-vs-uplift-targeting-criteo.md)
+- [It didn't replicate: propensity vs uplift targeting on a second randomized dataset](writing/uplift-targeting-replication-hillstrom.md)
 - [MMM vs incrementality: what each answers and what neither does](writing/mmm-vs-incrementality.md)
-- [When TWFE lies: staggered rollouts and what Callaway-Sant'Anna buys you](writing/twfe-lies-on-staggered-rollouts.md)
-- [E-values: a one-number sensitivity check for observational memos](writing/e-values-for-observational-memos.md)
+- [Geo holdouts as paid-media A/B](writing/geo-holdouts-as-paid-media-ab.md)
+- [Last-touch attribution systematically under-credits upper funnel](writing/last-touch-under-credits-upper-funnel.md)
+
+### Experimentation and causal inference
+
 - [CUPED inside sequential testing: two variance reductions that compound](writing/cuped-inside-sequential-testing.md)
 - [Finding (and fixing) a 17% Type-I error bug in an mSPRT implementation](writing/finding-and-fixing-msprt-bug.md)
+- [When TWFE lies: staggered rollouts and what Callaway-Sant'Anna buys you](writing/twfe-lies-on-staggered-rollouts.md)
 - [LaLonde, revisited: what a replication tells you about PSM, IPW, and AIPW](writing/what-lalonde-taught-me.md)
+- [E-values: a one-number sensitivity check for observational memos](writing/e-values-for-observational-memos.md)
 - [Picking a north-star metric when every candidate has a tradeoff](writing/picking-a-north-star-metric.md)
 
-Next up: [contribution plan](contribution-plan.md). Eleven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, a replication of the targeting check on a second public dataset, and silent judge drift. Round 4 is complete: the propensity-vs-uplift essay is revised in light of the replication, demand-forecasting's pipelines smoke-run in CI, and silent judge drift is covered. The fourth plan review chose consolidation over a new loop: [a synthesis of which number supports which decision](writing/which-number-supports-which-decision.md) is the first item. Next up is grouping this Writing section by theme.
+### Forecasting
+
+- [Pretrained forecasters vs SARIMA: when zero-shot wins, and when it doesn't](writing/pretrained-forecasters-vs-sarima.md)
+- [When boosting loses to SARIMA: baselines, MASE, and honest backtests](writing/when-boosting-loses-to-sarima.md)
+
+Next up: [contribution plan](contribution-plan.md). Eleven loops are done: LLM-as-judge metrics, pretrained forecasters, opt-in AI adoption, AI-mediated marketing measurement, offline evals vs online A/B, a public-data check of propensity vs uplift targeting, PPI++ with a pre-treatment covariate, staggered rollout vs fixed holdout, judge drift mid-test, a replication of the targeting check on a second public dataset, and silent judge drift. Round 4 is complete: the propensity-vs-uplift essay is revised in light of the replication, demand-forecasting's pipelines smoke-run in CI, and silent judge drift is covered. The fourth plan review chose consolidation over a new loop: [a synthesis of which number supports which decision](writing/which-number-supports-which-decision.md) is the first item. The Writing section is now grouped by theme. The plan's remaining round 5 item, a canary-set drift monitor, is proposed and not started.
 
 ## Side projects
 
