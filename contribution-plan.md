@@ -146,7 +146,7 @@ Round 5 ran two consolidation items and then one loop, as the fourth review rank
 
 1. **New loop, on real data: audit an LLM judge against human judgments.** Decision: do a real judge's errors depend on which model produced the output, and does PPI++ with human labels still hold up on real verdicts? Evidence: the public MT-Bench human judgments (Zheng et al., 2023, CC BY 4.0), where expert humans and GPT-4 judged the same pairwise comparisons, downloaded at runtime from a pinned revision. No model API calls or credentials. It passes the gate: it changes the synthesis's judge rows and its replication section.
 2. **Consolidate: add the bandit result to the synthesis** as a line for picking and quoting a creative a bandit chose, now that its evidence is merged ([experiment-toolkit#10](https://github.com/wavde/experiment-toolkit/pull/10)).
-3. **Candidate loop: a second real-judge audit with a current judge and current models,** only if a public dataset of paired human and LLM-judge verdicts with a usable license exists. Not yet checked; if none exists, cut it.
+3. **Candidate loop: a second real-judge audit with a current judge and current models,** only if a public dataset of paired human and LLM-judge verdicts with a usable license exists. **Cut:** no such dataset was found (see "Priority 3 cut" below).
 
 **Fix done in this review:** the bandit-evaluation runtime is now stated in its README section and results header, with the results unchanged ([experiment-toolkit#13](https://github.com/wavde/experiment-toolkit/pull/13)).
 
@@ -155,7 +155,20 @@ Round 5 ran two consolidation items and then one loop, as the fourth review rank
 - Every evidence script states its full runtime next to its command.
 - A log row cites only merged PRs.
 
-Priority 1 is done (loop 13): on MT-Bench, GPT-4's errors depended on which model the experts preferred (agreement 0.823 against 0.221), PPI++ stayed valid on the real verdicts, and the real judge was much less informative than the simulated ones, so PPI++ saved 2–28% of labels rather than 43% ([experiment-toolkit#14](https://github.com/wavde/experiment-toolkit/pull/14)). The synthesis's judge row, label-budget pattern, replication section and limitations are updated. **Round 6 status:** priorities 1 and 2 done; priority 3 open. Priority 2: the synthesis now has a row for quoting the lift of a creative a bandit picked, with the evidence from experiment-toolkit#10, and its decision rule names traffic the bandit never learned from. Next up: priority 3, which first checks whether a suitable public dataset exists. The sixth review is due when priority 3 is done or cut, before any further loop.
+Priority 1 is done (loop 13): on MT-Bench, GPT-4's errors depended on which model the experts preferred (agreement 0.823 against 0.221), PPI++ stayed valid on the real verdicts, and the real judge was much less informative than the simulated ones, so PPI++ saved 2–28% of labels rather than 43% ([experiment-toolkit#14](https://github.com/wavde/experiment-toolkit/pull/14)). The synthesis's judge row, label-budget pattern, replication section and limitations are updated. **Round 6 status:** complete. Priorities 1 and 2 done; priority 3 cut. Priority 2: the synthesis now has a row for quoting the lift of a creative a bandit picked, with the evidence from experiment-toolkit#10, and its decision rule names traffic the bandit never learned from. Next up: the sixth plan review, before any further loop.
+
+**Priority 3 cut.** The loop needed one public dataset with all of: real human verdicts (not LLM-generated or constructed labels), LLM-judge verdicts on the same items from a 2024-or-later judge, outputs from current models, and a license that allows use, all downloadable without API calls or credentials. Each candidate checked on the Hugging Face Hub, and why it fails:
+
+- `lmarena-ai/arena-human-preference-140k` (CC BY 4.0, 2025) and `arena-human-preference-100k` (CC BY 4.0): real human votes on current models, but no LLM-judge verdicts. Adding them would need API calls.
+- `lmarena-ai/PPE-Human-Preference-V1` (2024): human Chatbot Arena votes on current models, but no per-item judge verdicts are published; the PPE code runs judges through APIs. No dataset-level license: prompts are CC BY 4.0 and model outputs fall under each provider's terms.
+- `lmsys/arena-human-preference-55k`: gated (needs credentials), and human votes only.
+- `nvidia/HelpSteer2` and `nvidia/HelpSteer3` (CC BY 4.0, HelpSteer3 2025): real human annotations, but no LLM-judge verdicts.
+- `ScalerLab/JudgeBench` (MIT, 2024, GPT-4o and Claude-3.5 responses): labels are objective correctness, not human judgments, and no judge verdicts are included.
+- `allenai/reward-bench` and `reward-bench-2` (ODC-BY): chosen/rejected labels are a mix of human-verified, correctness-based and LLM-judged (the MT-Bench GPT-4 subsets), and they contain no judge verdicts.
+- `allenai/reward-bench-results`: the nearest miss. It has per-item verdicts from GPT-4o (2024-05-13) and GPT-4-turbo (2024-04-09) on human-labelled preference sets, including the same MT-Bench human judgments loop 13 used. But the judged outputs are from 2023 models or older, the verdicts are chosen-vs-rejected only, and the repository states no license.
+- `tatsu-lab/alpaca_eval`: human and GPT-4 annotations, but from 2023 and CC BY-NC.
+
+A candidate for the sixth review, not started: re-run loop 13's audit with GPT-4o as judge on the same MT-Bench items using `reward-bench-results`, if its license is clarified. That would test whether a newer judge shows the same arm-dependent error, but not on current models.
 
 ## Round 3 themes (done)
 
@@ -294,4 +307,4 @@ The order reflects AI relevance and how much existing work each theme can reuse.
 
 - **Held up:** the first real-data check of the LLM-judge loops, with no API calls: public paired verdicts, downloaded at runtime and checksummed. The shared assumption replicated. GPT-4's win rate for the stronger model was above the experts' in 15 of 15 pairs (CI excludes zero in 9), and its agreement with experts was 0.823 when they preferred the stronger model against 0.221 when they preferred the weaker one. PPI++ with random human labels kept 0.930 to 0.956 coverage on the real verdicts, and the closed-form variance ratio matched the simulation.
 - **Didn't:** the simulated judges were too good. The real judge correlated with expert verdicts at 0.14 to 0.56 against 0.69 assumed, so PPI++ saved 2–28% of labels where loop 1's judge implies 43%, and every simulated label budget is optimistic. The data are 2023 models judged by a 2023 GPT-4, pairwise rather than per-output, and the resampling check treats the judged items as the population.
-- **Next question:** round 6 priority 2: add the bandit result to the synthesis (done; see "Round 6 status" above). The sixth review is due once round 6's priority 3 is done or cut.
+- **Next question:** round 6 priority 2: add the bandit result to the synthesis (done; see "Round 6 status" above). Priority 3 was cut because no suitable public dataset exists, so round 6 is complete and the sixth review is due before any further loop.
