@@ -1,12 +1,12 @@
 # Which number supports which decision: measuring AI features
 
-*~8 min read. A synthesis of the twelve loops in the [contribution plan](../contribution-plan.md). It adds no new evidence: every number below appears in the linked essay, and each essay links to the code that reproduces it with one command and a fixed seed.*
+*~8 min read. A synthesis of the thirteen loops in the [contribution plan](../contribution-plan.md). It adds no new evidence: every number below appears in the linked essay, and each essay links to the code that reproduces it with one command and a fixed seed.*
 
 ## The recommendation
 
 When someone shows you a number about an AI feature, ask two questions before acting on it: **what was randomized, and who labeled the outcome?** A number supports a decision only if the randomization sits at the decision being made and the outcome is anchored to human judgment by a random sample. Otherwise it's a screen: useful for deciding what to test, not for deciding what to ship.
 
-Across twelve loops, the numbers teams are usually shown failed that test in the same ways:
+Across thirteen loops, the numbers teams are usually shown failed that test in the same ways:
 
 - An LLM judge's score difference, when the treatment changes what the judge sees.
 - An offline eval win, read without reweighting to live traffic.
@@ -23,7 +23,7 @@ A team measuring an AI feature is rarely short of numbers. It's short of a way t
 
 ## What this draws on
 
-Nine of the twelve loops are simulations where the true effect is known by construction, so every estimate can be checked against the truth. Two use public randomized experiments: the Criteo uplift dataset and the Hillstrom e-mail experiment. One is a rolling-origin backtest on the public UCI Online Retail II data. A reduced-size run of every evidence pipeline runs in CI.
+Nine of the thirteen loops are simulations where the true effect is known by construction, so every estimate can be checked against the truth. Two use public randomized experiments: the Criteo uplift dataset and the Hillstrom e-mail experiment. One is a rolling-origin backtest on the public UCI Online Retail II data. One audits a real LLM judge, GPT-4, against expert human verdicts on the same comparisons (MT-Bench). A reduced-size run of every evidence pipeline runs in CI.
 
 That makes the evidence good at one thing: showing that a method fails, or works, under a mechanism I chose. It's weaker at saying how often that mechanism occurs in practice. "Assumptions and limitations" below comes back to this.
 
@@ -31,7 +31,7 @@ That makes the evidence good at one thing: showing that a method fails, or works
 
 | Decision | Number you'll often be shown | What went wrong with it | Number that supports the decision | Essay |
 |---|---|---|---|---|
-| Ship on a judge-scored metric | Judge-score difference | Judge 5 points more lenient on treatment, no true effect: rejected 15% of the time at 1,000 units per arm, 49% at 5,000, 99% at 20,000 | PPI++ with human labels drawn at random within each arm: 3.6% to 5.8% | [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md) |
+| Ship on a judge-scored metric | Judge-score difference or judge win rate | Simulation: a judge 5 points more lenient on treatment, no true effect, rejected 15% of the time at 1,000 units per arm, 49% at 5,000, 99% at 20,000. Real data (MT-Bench): GPT-4's win rate for the stronger model was above expert humans' in 15 of 15 pairs, by up to +0.185; on a near tie (experts 0.509) it gave 0.641 | PPI++ with human labels drawn at random within each arm: 3.6% to 5.8% in simulation, coverage 0.930 to 0.956 on real MT-Bench verdicts | [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md), [A real LLM judge favours the winner](real-judge-audit-mt-bench.md) |
 | Keep reading a test after a judge upgrade | Judge scores pooled across versions; labels from before the upgrade | Pooled: rejected a true null 82.6% of the time. Pre-upgrade labels: Type-I rose from 0.064 to 0.392 as labels went from 250 to 4,000 | PPI++ with labels spread across the test or stratified by judge version | [Upgrading the judge mid-test](judge-drift-mid-test.md) |
 | Trust a test when the judge may change silently | Judge-only readout; launch-week labels | Treatment-only drift: Type-I 0.922 and 0.097 | PPI++ with labels drawn at random from the whole test: 0.048 to 0.053 under every drift tested. To check whether the judge changed: a canary of stored outputs from every arm, re-judged daily (caught treatment-only drift 0.932 of the time; 0.021 when real quality fell) | [When the judge drifts silently](silent-judge-drift.md), [A canary set catches a drifting judge](canary-set-judge-drift.md) |
 | Ship from an offline eval | Raw offline eval win | Shipped a change that hurts live traffic in 100% of replications; never stopped a latency cost | Reweighted offline readouts (0–1%) to choose what to test; an online A/B with guardrails to ship (stopped the latency cost in 96%) | [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) |
@@ -47,24 +47,31 @@ That makes the evidence good at one thing: showing that a method fails, or works
 
 **Biased numbers get more confident with more data.** The naive judge metric's false-positive rate went from 15% to 99% as traffic grew. Front-loaded labels went from 0.064 to 0.392 Type-I as the label budget grew. Neither bias shrinks with data, but the standard error does. If a number measures the wrong thing, a bigger test makes it wrong with more certainty. "Run it longer" is not a fix for a design problem.
 
-**The valid number is expensive, so the budget is the real decision.** With a noisy judge, power at 5,000 units and 500 labels per arm was 0.59 for the naive judge metric and 0.25 for PPI++. On a real offline win, the share of replications that shipped fell from 87% (raw) to 49% (reweighted) to 25% (PPI++). The two-cell budget test used 2,000,000 users per test. A staggered rollout gives a more precise short-run read than a fixed holdout (SE 0.0175 vs 0.0285) and is still the wrong design for a fading effect. The cheapest lever was usually upstream: improving the judge from 85% to 95% accuracy cut the label budget from 2,397 to 982 labels per arm, more than any covariate did.
+**The valid number is expensive, so the budget is the real decision.** With a noisy judge, power at 5,000 units and 500 labels per arm was 0.59 for the naive judge metric and 0.25 for PPI++. On a real offline win, the share of replications that shipped fell from 87% (raw) to 49% (reweighted) to 25% (PPI++). The two-cell budget test used 2,000,000 users per test. A staggered rollout gives a more precise short-run read than a fixed holdout (SE 0.0175 vs 0.0285) and is still the wrong design for a fading effect. The cheapest lever was usually upstream: improving the judge from 85% to 95% accuracy cut the label budget from 2,397 to 982 labels per arm, more than any covariate did. On real data the judge was a weaker shortcut than any simulated one: GPT-4's verdicts correlated with expert verdicts at 0.14 to 0.56, against 0.69 for loop 1's simulated judge, so PPI++ saved 2% to 28% of the labels rather than 43%. The simulated label budgets are optimistic.
 
 **Some failures have no diagnostic, so the design has to carry them.** The fake-launch placebo can't see adoption timed to a rise in need (97.2% confidently wrong). Offline evals can't see latency. In each case, no amount of analysis on the existing data fixes it; randomizing at the decision does. Judge drift was on this list until loop 12: score monitors on live traffic can't tell a drifting judge from a real quality drop (both fired in 0.993 and 1.000 of replications when quality fell and the judge didn't change), but a canary of stored outputs re-judged daily can, because its quality can't change (0.021 on the same drop). That's a diagnosis, not a fix: the canary says whether the judge changed, and the readout still needs labels drawn at random from the whole test.
 
 ## What replicated, and what didn't
 
-Only one loop's conclusions were tested on a second dataset, and the result was mixed:
+Two sets of conclusions have been checked on real data, and both results were mixed.
+
+The targeting loop was re-run on a second randomized dataset:
 
 - **Replicated:** platform-credited results overstated incrementality on both datasets (4.71x and 2.74x when targeting everyone), and under propensity targeting the marginal return was below the average on both (0.15 and 0.67). The direction held; the size did not, so it has to be measured.
 - **Didn't replicate:** that propensity targeting already concentrates the persuadable users. The top 20% by propensity held 72.2% of incremental visits on Criteo and 25.9% on the e-mail experiment. The Criteo essay's rule was revised to say so.
 
-Everything else in the map rests on simulation. The simulations show what a method does under a stated mechanism, with the answer known, but they haven't been replicated on real data.
+The LLM-judge loops' shared assumption was audited on real verdicts (MT-Bench, GPT-4 against expert humans):
+
+- **Replicated:** judge error depends on the arm. When experts preferred the stronger model, GPT-4 agreed 0.823 of the time; when they preferred the weaker one, 0.221. PPI++ with randomly drawn human labels stayed valid on the real verdicts (coverage 0.930 to 0.956), and the judge alone didn't (at most 0.005 in 13 of 15 pairs).
+- **Didn't:** how informative the judge is. The real correlation with expert verdicts (0.14 to 0.56) was far below the simulated judges', so every label budget derived from simulation overstates what PPI++ saves.
+
+The rest of the map, including judge drift, offline evals, opt-in adoption and rollout design, rests on simulation. The simulations show what a method does under a stated mechanism, with the answer known, but they haven't been replicated on real data.
 
 ## Assumptions and limitations
 
 - **Mechanisms are chosen, one at a time.** Each simulation switches on one failure (a lenient judge, mix shift, need-timed adoption, a fading effect, algorithm-paced spend) at a chosen size. Real systems combine them, at sizes I don't know.
 - **Simple outcome models.** Quality is binary, judges are confusion matrices, effects are constant or follow one shape.
-- **Two public randomized datasets,** both in marketing. None of the LLM-judge results has been checked against a real judge on real outputs.
+- **Two public randomized datasets,** both in marketing, and **one public set of paired human and LLM-judge verdicts** (MT-Bench: six 2023 models, GPT-4 as judge, pairwise comparisons). Judge drift and offline-eval results haven't been checked on real data.
 - **The numbers are illustrations, not benchmarks.** "82.6%" is what happens under that loop's settings, not a rate to expect in production. The direction and the mechanism are what carry over.
 
 ## When the conclusion breaks
@@ -76,7 +83,7 @@ Everything else in the map rests on simulation. The simulations show what a meth
 
 ## What would change my mind
 
-- **Real-judge audits showing that judge errors don't depend on which arm produced the output.** Most of the judge rules guard against arm-dependent error. If real judges rarely have it, the judge-only metric would be safe more often.
+- **Real-judge audits showing that judge errors don't depend on which arm produced the output.** Most of the judge rules guard against arm-dependent error. If real judges rarely have it, the judge-only metric would be safe more often. The one audit so far found the opposite: on MT-Bench, GPT-4's agreement with experts was 0.823 or 0.221 depending on which model the experts preferred. An audit of current judges and models could still change this.
 - **A replication of any simulation result on real data that comes out the other way,** as loop 10 did for loop 6.
 - **A cheap diagnostic for a failure listed above as undiagnosable.** Loop 12 found one for judge drift in simulation: a canary of 400 stored outputs per arm, re-judged daily with no human labels, caught treatment-only drift 0.932 of the time and stayed at 0.021 when real quality fell. That moves *detecting* drift from "design it in" to "check it", but not the readout, which still needs random labels. It hasn't been run against a real hosted judge; a judge whose daily verdicts on fixed outputs are much noisier than its error rates imply would need a larger canary.
 
@@ -90,4 +97,4 @@ Everything else in the map rests on simulation. The simulations show what a meth
 
 ---
 
-*Sources, newest first: [A canary set catches a drifting judge](canary-set-judge-drift.md) · [When the judge drifts silently](silent-judge-drift.md) · [It didn't replicate](uplift-targeting-replication-hillstrom.md) · [Upgrading the judge mid-test](judge-drift-mid-test.md) · [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) · [A covariate stacks on the judge](ppi-with-covariates-label-budget.md) · [The targeting model already knows who would convert](propensity-vs-uplift-targeting-criteo.md) · [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) · [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) · [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) · [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) · [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md). Code: [experiment-toolkit](https://github.com/wavde/experiment-toolkit), [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook), [paid-media-playbook](https://github.com/wavde/paid-media-playbook), [demand-forecasting](https://github.com/wavde/demand-forecasting).*
+*Sources, newest first: [A real LLM judge favours the winner](real-judge-audit-mt-bench.md) · [A canary set catches a drifting judge](canary-set-judge-drift.md) · [When the judge drifts silently](silent-judge-drift.md) · [It didn't replicate](uplift-targeting-replication-hillstrom.md) · [Upgrading the judge mid-test](judge-drift-mid-test.md) · [A staggered rollout can't see novelty](staggered-rollout-vs-holdout.md) · [A covariate stacks on the judge](ppi-with-covariates-label-budget.md) · [The targeting model already knows who would convert](propensity-vs-uplift-targeting-criteo.md) · [An offline eval win is evidence about the eval set](offline-evals-vs-online-ab.md) · [Measuring marketing when the algorithm runs the campaign](ai-mediated-marketing-measurement.md) · [Opt-in AI features](opt-in-ai-adoption-observational-bias.md) · [Pretrained forecasters vs SARIMA](pretrained-forecasters-vs-sarima.md) · [LLM-as-judge is a noisy metric](llm-judge-noise-in-ab-tests.md). Code: [experiment-toolkit](https://github.com/wavde/experiment-toolkit), [causal-inference-playbook](https://github.com/wavde/causal-inference-playbook), [paid-media-playbook](https://github.com/wavde/paid-media-playbook), [demand-forecasting](https://github.com/wavde/demand-forecasting).*
